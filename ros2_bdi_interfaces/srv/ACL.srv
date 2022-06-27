@@ -1,0 +1,13 @@
+# This is ACL service message used to pass personalized messages among agents
+# returns accepted = true if request accepted
+# returns updated  = true if accepted AND they are (already) there or successfully added in case of addition requested
+
+# @acl              -> acl message
+# @agent_group      -> agent's group
+# ---
+# @received         -> message received by agent
+
+ACL acl
+string agent_group
+---
+bool   received

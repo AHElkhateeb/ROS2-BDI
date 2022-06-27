@@ -29,6 +29,7 @@ rosidl_generate_interfaces( ${PROJECT_NAME}
   "srv/CheckDesire.srv"
   "srv/UpdDesireSet.srv"
   "srv/BDIPlanExecution.srv"
+  "srv/ACL.srv"
 
   DEPENDENCIES plansys2_msgs
 )
