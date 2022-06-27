@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ACL_MESSAGE_H_
+#define ACL_MESSAGE_H_
+
 #include <string>
 #include <iterator>
 #include <vector>
@@ -63,3 +65,6 @@ public:
 	void setSender(string sender);
 	ACLMessage shallowClone();
 };
+
+
+#endif // ACL_MESSAGE_H_
