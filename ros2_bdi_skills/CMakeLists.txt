@@ -18,6 +18,7 @@ set(SKILLS-SOURCES
   src/sensor.cpp
   src/communications_client.cpp
   src/bdi_action_executor.cpp
+  src/ACLMessage.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${SKILLS-SOURCES})
