@@ -37,11 +37,6 @@ ACLCommunicator::ACLCommunicator()
   this->declare_parameter(PARAM_AGENT_ID, "agent0");
   this->declare_parameter(PARAM_AGENT_GROUP_ID, "agent0_group");
   this->declare_parameter(PARAM_DEBUG, true);
-  this->declare_parameter(PARAM_BELIEF_CHECK, vector<string>());
-  this->declare_parameter(PARAM_BELIEF_WRITE, vector<string>());
-  this->declare_parameter(PARAM_DESIRE_CHECK, vector<string>());
-  this->declare_parameter(PARAM_DESIRE_WRITE, vector<string>());
-  this->declare_parameter(PARAM_DESIRE_MAX_PRIORITIES, vector<double>());
 }
 
 /*
@@ -98,63 +93,7 @@ void ACLCommunicator::init()
   // init two empty managed desires where to store the two you're waiting for an update
   desire_waiting_for_ = vector<ManagedDesire>(2);
 
-  string acceptingBeliefsMsg = "accepting beliefs alteration from: ";
-  vector<string> acceptingBeliefsGroups = this->get_parameter(PARAM_BELIEF_WRITE).as_string_array();
-  if(acceptingBeliefsGroups.size() == 0)
-    acceptingBeliefsMsg += "no group";
-  else
-    for(int i = 0; i<acceptingBeliefsGroups.size(); i++)
-      acceptingBeliefsMsg += acceptingBeliefsGroups[i]  + (((i+1)==acceptingBeliefsGroups.size()) ? "" : ", ");
-
-  string acceptingDesiresMsg = "accepting desires alteration from: ";
-  vector<string> acceptingDesiresGroups = this->get_parameter(PARAM_DESIRE_WRITE).as_string_array();
-  vector<double> acceptingDesiresPrioritiesGroups = this->get_parameter(PARAM_DESIRE_MAX_PRIORITIES).as_double_array();
-  if(acceptingDesiresGroups.size() == 0)
-    acceptingDesiresMsg += "no group";
-  else
-    for(int i = 0; i<acceptingDesiresGroups.size(); i++)
-    {
-      acceptingDesiresMsg += acceptingDesiresGroups[i];
-      
-      acceptingDesiresMsg += (acceptingDesiresPrioritiesGroups.size() > i)? 
-        "(max_pr = " + std::to_string(acceptingDesiresPrioritiesGroups[i]) + ")" : 
-        "(max_pr = 0.01)"; 
-        
-      acceptingDesiresMsg +=  (((i+1)==acceptingDesiresGroups.size()) ? "" : ", ");
-    }
-
-  RCLCPP_INFO(this->get_logger(), "Multi-Agent ACL Communicator node initialized:\n" + 
-      acceptingBeliefsMsg + ";\n" + acceptingDesiresMsg);
-}
-
-/*
-  Return value of the max accepted priority for add desire requests coming from a requesting agent group
-  Return negative value if not present
-*/
-float ACLCommunicator::getMaxAcceptedPriority(const string& requestingAgentGroup)
-{
-  int indexAccepted = -1;
-  float maxAcceptedPriority = -1.0f;//init to negative value
-
-  // find index of accepted group in accept_desires_from array string paramters
-  vector<string> acceptedGroups = this->get_parameter(PARAM_DESIRE_WRITE).as_string_array();
-  for(int i = 0; indexAccepted == -1 && i <  acceptedGroups.size(); i++)
-    if(acceptedGroups[i] == requestingAgentGroup)
-      indexAccepted = i;
-
-  if(indexAccepted >= 0)//if found
-  {
-    // retrieve correspondent priority from accept_desires_max_priorities double array
-    vector<double> acceptedPriorities = this->get_parameter(PARAM_DESIRE_MAX_PRIORITIES).as_double_array();
-    
-    if(indexAccepted < acceptedPriorities.size())
-      maxAcceptedPriority = std::max(0.000f, std::min(1.0f, (float)acceptedPriorities[indexAccepted]));//priority has to be between 0.001 and 1
-    
-    else
-      maxAcceptedPriority = 0.000f; //bad formatted accept_desires_max_priorities array, but do not refuse just put 0.000 as priority of the desire
-  }
-
-  return maxAcceptedPriority;
+  RCLCPP_INFO(this->get_logger(), "Multi-Agent ACL Communicator node initialized\n");
 }
 
 /*

@@ -44,12 +44,6 @@ public:
 private:
 
     /*
-      Return value of the max accepted priority for add desire requests coming from a requesting agent group
-      Return negative value if not present
-    */
-    float getMaxAcceptedPriority(const std::string& requestingAgentGroup);
-
-    /*
       @updIndex to be used to know which lock has to be checked among the two in desire_set_upd_locks_
       and which waiting counter has to be incremented and/or checked
 
@@ -107,9 +101,6 @@ private:
     rclcpp::Publisher<ros2_bdi_interfaces::msg::Belief>::SharedPtr add_belief_publisher_;
     //del_belief publisher
     rclcpp::Publisher<ros2_bdi_interfaces::msg::Belief>::SharedPtr del_belief_publisher_;
-
-    // handle acl msgs from other agents
-    rclcpp::Service<ros2_bdi_interfaces::srv::ACL>::SharedPtr messaging_server_;
     
     // lock to put waiting for next desire set addition/deletion
     std::vector<std::mutex> desire_set_upd_locks_;
@@ -125,6 +116,9 @@ private:
 
     // PlanSys2 Monitor Client supporting nodes & clients for calling the {psys2_node}/get_state services
     std::shared_ptr<PlanSys2MonitorClient> psys2_monitor_client_;
+
+    // handle acl msgs from other agents
+    rclcpp::Service<ros2_bdi_interfaces::srv::ACL>::SharedPtr messaging_server_;
 
 };
 

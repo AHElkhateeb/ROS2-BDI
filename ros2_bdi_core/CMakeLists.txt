@@ -105,6 +105,15 @@ target_link_libraries(plansys2_monitor
     ${PROJECT_NAME}
 )
 
+add_executable(acl_communicator src/acl_communicator.cpp)
+ament_target_dependencies(acl_communicator 
+  ${common_dependencies}
+)
+# link plansys2_monitor to ros2_bdi_core library since it makes usage of plansys2_monitor_client 
+target_link_libraries(acl_communicator
+    ${PROJECT_NAME}
+)
+
 add_executable(ma_request_handler src/ma_request_handler.cpp)
 ament_target_dependencies(ma_request_handler 
   ${common_dependencies}
@@ -133,6 +142,7 @@ install(TARGETS
   plan_director
   plansys2_monitor
   ma_request_handler
+  acl_communicator
   event_listener
   DESTINATION lib/${PROJECT_NAME}
 )

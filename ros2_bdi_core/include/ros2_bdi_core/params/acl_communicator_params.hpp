@@ -8,14 +8,6 @@
 
 #define ADD_I 1
 #define DEL_I 0
-#define MAX_WAIT_UPD 4 // indicates number of belief/desire set notification to wait before considering a submitted upd request failed 
-
-/* ROS2 Parameter names for PlanSys2Monitor node */
-#define PARAM_BELIEF_CHECK "belief_ck"
-#define PARAM_BELIEF_WRITE "belief_w"
-#define PARAM_DESIRE_CHECK "desire_ck"
-#define PARAM_DESIRE_WRITE "desire_w"
-#define PARAM_DESIRE_MAX_PRIORITIES "desire_pr"
-
+#define MAX_WAIT_UPD 4 // indicates number of belief/desire set notification to wait before considering a submitted upd request failed
 
 #endif // ACL_COMMUNICATOR_PARAMS_H_
