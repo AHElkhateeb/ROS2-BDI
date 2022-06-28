@@ -7,6 +7,8 @@
 #include <chrono>
 #include <algorithm>
 
+#include "ros2_bdi_interfaces/msg/acl_msg.hpp"
+
 using std::string;
 using std::vector;
 using std::iterator;
@@ -31,6 +33,7 @@ private:
 public:
 	ACLMessage();
 	ACLMessage(string performative);
+	ACLMessage(ros2_bdi_interfaces::msg::AclMsg msg);
 	void addReceiver(string receiver);
 	void addReplyTo(string reply_to);
 	void clearAllReceiver();
@@ -43,6 +46,7 @@ public:
 	string getEncoding();
 	string getInReplyTo();
 	string getLanguage();
+	ros2_bdi_interfaces::msg::AclMsg getMessage();
 	string getOntology();
 	string getPerformative();
 	string getProtocol();

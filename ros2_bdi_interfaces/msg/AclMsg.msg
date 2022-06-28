@@ -37,7 +37,7 @@ string FIPA_PROPOSE = "fipa-propose"
 string performative
 string sender
 string[] receiver
-string reply_to
+string[] reply_to
 string content
 string language
 string encoding

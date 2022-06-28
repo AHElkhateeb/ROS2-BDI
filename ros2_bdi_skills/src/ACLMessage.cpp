@@ -1,5 +1,7 @@
 #include"ros2_bdi_skills/ACLMessage.hpp"
 
+using ros2_bdi_interfaces::msg::AclMsg;
+
 	ACLMessage::ACLMessage()
 	{
 		performative_ = "NOT_UNDERSTOOD"; //TO-DO define constants
@@ -8,6 +10,23 @@
 	ACLMessage::ACLMessage(string performative)
 	{
 		performative_ = performative;
+	}
+
+	ACLMessage::ACLMessage(AclMsg msg)
+	{
+		performative_ = msg.performative;
+		sender_ = msg.sender;
+		receiver_ = msg.receiver;
+		reply_to_ = msg.reply_to;
+		content_ = msg.content;
+		language_ = msg.language;
+		encoding_ = msg.encoding;
+		ontology_ = msg.ontology;
+		protocol_ = msg.protocol;
+		conversation_id_ = msg.conversation_id;
+		reply_with_ = msg.reply_with;
+		in_reply_to_ = msg.in_reply_to;
+		reply_by_ = msg.reply_by;
 	}
 
 	void ACLMessage::addReceiver(string receiver)
@@ -104,6 +123,25 @@
 	string ACLMessage::getLanguage()
 	{
 		return language_;
+	}
+
+	AclMsg ACLMessage::getMessage()
+	{
+		AclMsg msg = AclMsg();
+		msg.performative = performative_;
+		msg.sender = sender_;
+		msg.receiver = receiver_;
+		msg.reply_to = reply_to_;
+		msg.content = content_;
+		msg.language = language_;
+		msg.encoding = encoding_;
+		msg.ontology = ontology_;
+		msg.protocol = protocol_;
+		msg.conversation_id = conversation_id_;
+		msg.reply_with = reply_with_;
+		msg.in_reply_to = in_reply_to_;
+		msg.reply_by = reply_by_;
+		return msg;
 	}
 
 	string ACLMessage::getOntology()
