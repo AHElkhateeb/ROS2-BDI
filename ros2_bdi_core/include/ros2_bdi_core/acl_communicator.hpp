@@ -72,8 +72,8 @@ private:
     /*  
         ACL message service handler        
     */
-    void handleMsgReceived(const AclSrv::Request::SharedPtr request,
-        const AclSrv::Response::SharedPtr response);
+    void handleMsgReceived(const ros2_bdi_interfaces::srv::AclSrv::Request::SharedPtr request,
+        const ros2_bdi_interfaces::srv::AclSrv::Response::SharedPtr response);
     
     // agent id that defines the namespace in which the node operates
     std::string agent_id_;
