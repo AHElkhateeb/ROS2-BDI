@@ -21,7 +21,7 @@ rosidl_generate_interfaces( ${PROJECT_NAME}
   "msg/BDIActionExecutionInfo.msg"
   "msg/BDIPlanExecutionInfo.msg"
   "msg/PlanSys2State.msg"
-  "msg/ACL.msg"
+  "msg/AclMsg.msg"
   
   "srv/IsAcceptedOperation.srv"
   "srv/CheckBelief.srv"
@@ -29,7 +29,7 @@ rosidl_generate_interfaces( ${PROJECT_NAME}
   "srv/CheckDesire.srv"
   "srv/UpdDesireSet.srv"
   "srv/BDIPlanExecution.srv"
-  "srv/ACL.srv"
+  "srv/AclSrv.srv"
 
   DEPENDENCIES plansys2_msgs
 )

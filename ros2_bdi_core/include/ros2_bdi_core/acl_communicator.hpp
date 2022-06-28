@@ -11,7 +11,7 @@
 #include "ros2_bdi_interfaces/msg/desire_set.hpp"
 #include "ros2_bdi_interfaces/srv/upd_belief_set.hpp"
 #include "ros2_bdi_interfaces/srv/upd_desire_set.hpp"
-#include "ros2_bdi_interfaces/srv/acl.hpp"
+#include "ros2_bdi_interfaces/srv/acl_srv.hpp"
 
 #include "ros2_bdi_utils/ManagedBelief.hpp"
 #include "ros2_bdi_utils/ManagedDesire.hpp"
@@ -72,8 +72,8 @@ private:
     /*  
         ACL message service handler        
     */
-    void handleMsgReceived(const ACL::Request::SharedPtr request,
-        const ACL::Response::SharedPtr response);
+    void handleMsgReceived(const AclSrv::Request::SharedPtr request,
+        const AclSrv::Response::SharedPtr response);
     
     // agent id that defines the namespace in which the node operates
     std::string agent_id_;
@@ -118,7 +118,7 @@ private:
     std::shared_ptr<PlanSys2MonitorClient> psys2_monitor_client_;
 
     // handle acl msgs from other agents
-    rclcpp::Service<ros2_bdi_interfaces::srv::ACL>::SharedPtr messaging_server_;
+    rclcpp::Service<ros2_bdi_interfaces::srv::AclSrv>::SharedPtr messaging_server_;
 
 };
 

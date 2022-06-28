@@ -7,7 +7,7 @@
 # ---
 # @received         -> message received by agent
 
-ACL acl
+AclMsg acl
 string agent_group
 ---
 bool   received

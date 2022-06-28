@@ -25,7 +25,7 @@ using ros2_bdi_interfaces::msg::Belief;
 using ros2_bdi_interfaces::msg::BeliefSet;
 using ros2_bdi_interfaces::msg::Desire;
 using ros2_bdi_interfaces::msg::DesireSet;
-using ros2_bdi_interfaces::srv::ACL;
+using ros2_bdi_interfaces::srv::AclSrv;
 
 using BDIManaged::ManagedBelief;
 using BDIManaged::ManagedDesire;
@@ -66,7 +66,7 @@ void ACLCommunicator::init()
               bind(&ACLCommunicator::updatedDesireSet, this, _1), sub_opt);
     
   // init server for handling msg requests from other agents
-  messaging_server_ = this->create_service<ACL>(ACL_SRV, 
+  messaging_server_ = this->create_service<AclSrv>(ACL_SRV, 
       bind(&ACLCommunicator::handleMsgReceived, this, _1, _2));
   
   // add belief publisher -> to publish on the topic and alter the belief set when the request can go through
@@ -178,8 +178,8 @@ void ACLCommunicator::updatedBeliefSet(const BeliefSet::SharedPtr msg)
 /*  
     ACL message service handler        
 */
-void ACLCommunicator::handleMsgReceived(const ACL::Request::SharedPtr request,
-    const ACL::Response::SharedPtr response)
+void ACLCommunicator::handleMsgReceived(const AclSrv::Request::SharedPtr request,
+    const AclSrv::Response::SharedPtr response)
 {
 }
 
