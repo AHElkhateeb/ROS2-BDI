@@ -50,6 +50,8 @@ public:
 	string getOntology();
 	string getPerformative();
 	string getProtocol();
+	vector<string> getReceiver();
+	vector<string> getReplyTo();
 	float getReplyBy();
 	string getReplyWith();
 	string getSender();

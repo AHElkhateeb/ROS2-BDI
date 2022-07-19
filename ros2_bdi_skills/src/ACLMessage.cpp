@@ -159,6 +159,16 @@ using ros2_bdi_interfaces::msg::AclMsg;
 		return protocol_;
 	}
 
+	vector<string> ACLMessage::getReceiver()
+	{
+		return receiver_;
+	}
+	
+	vector<string> ACLMessage::getReplyTo()
+	{
+		return reply_to_;
+	}
+
 	float ACLMessage::getReplyBy()
 	{
 		return reply_by_;
