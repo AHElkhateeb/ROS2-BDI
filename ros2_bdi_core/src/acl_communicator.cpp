@@ -25,10 +25,13 @@ using ros2_bdi_interfaces::msg::Belief;
 using ros2_bdi_interfaces::msg::BeliefSet;
 using ros2_bdi_interfaces::msg::Desire;
 using ros2_bdi_interfaces::msg::DesireSet;
+using ros2_bdi_interfaces::msg::AclMsg;
 using ros2_bdi_interfaces::srv::AclSrv;
 
 using BDIManaged::ManagedBelief;
 using BDIManaged::ManagedDesire;
+
+int i = 0;
 
 
 ACLCommunicator::ACLCommunicator()
@@ -64,10 +67,13 @@ void ACLCommunicator::init()
   desire_set_subscriber_ = this->create_subscription<DesireSet>(
               DESIRE_SET_TOPIC, qos_keep_all,
               bind(&ACLCommunicator::updatedDesireSet, this, _1), sub_opt);
-    
+
+  // to make the msg receivals callbacks run on different threads
+  callback_group_msg_receivals_ = this->create_callback_group(rclcpp::callback_group::CallbackGroupType::Reentrant);
+
   // init server for handling msg requests from other agents
   messaging_server_ = this->create_service<AclSrv>(ACL_SRV, 
-      bind(&ACLCommunicator::handleMsgReceived, this, _1, _2));
+      bind(&ACLCommunicator::handleMsgReceived, this, _1, _2), rmw_qos_profile_services_default, callback_group_msg_receivals_);
   
   // add belief publisher -> to publish on the topic and alter the belief set when the request can go through
   add_belief_publisher_ = this->create_publisher<Belief>(ADD_BELIEF_TOPIC, 10);
@@ -181,13 +187,45 @@ void ACLCommunicator::updatedBeliefSet(const BeliefSet::SharedPtr msg)
 void ACLCommunicator::handleMsgReceived(const AclSrv::Request::SharedPtr request,
     const AclSrv::Response::SharedPtr response)
 {
+  ACLMessage msg_received = ACLMessage(request->msg); 
+
+  auto itr = std::find(conversation_IDs_.begin(), conversation_IDs_.end(), msg_received.getConversationId());
+  
+  if(itr == conversation_IDs_.end()) //NotFound
+    {
+      //add to list of conversations and dispatch a new ConversationClient Node;
+      conversation_IDs_.push_back(msg_received.getConversationId());
+
+      auto type = msg_received.getProtocol();
+  
+      auto role = msg_received.getPerformative(); //CFP && type is CNET use the CNET responder class
+
+      conv_clients_.push_back(std::make_shared<ACLConversations::ConversationsClient>(&desire_set_, &belief_set_));
+      
+      RCLCPP_INFO(this->get_logger(), "ConvID: " + msg_received.getConversationId() + " added and will be dispatched");
+      conv_clients_.back()->handleMsg(msg_received);
+    }
+  else //Found
+    {
+      i++;
+      belief_set_.clear();
+      belief_set_.insert(ManagedBelief("1st Belief was added",i,{"",""},2.3f));
+      RCLCPP_INFO(this->get_logger(), "ConvID: " + msg_received.getConversationId() + " found and will be dispatched");
+      //dispatch to the found ConversationClient Node;
+      int index = itr - conversation_IDs_.begin();
+      conv_clients_[index]->handleMsg(msg_received);
+    }
+
+  //replies to request with true for message being received
+  response->received = true;
 }
 
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
   auto node = std::make_shared<ACLCommunicator>();
-  bool psys2_booted = node->wait_psys2_boot(std::chrono::seconds(8));//Wait max 8 seconds for plansys2 to boot
+  //bool psys2_booted = node->wait_psys2_boot(std::chrono::seconds(8));//Wait max 8 seconds for plansys2 to boot
+  bool psys2_booted = true;
   
   if(psys2_booted)
   {

@@ -21,6 +21,10 @@
 
 #include "rclcpp/rclcpp.hpp"
 
+#include "ros2_bdi_skills/conversations_client.hpp"
+
+#include "ros2_bdi_skills/ACLMessage.hpp"
+
 class ACLCommunicator : public rclcpp::Node
 {
 public:
@@ -84,6 +88,7 @@ private:
     rclcpp::Subscription<ros2_bdi_interfaces::msg::BeliefSet>::SharedPtr belief_set_subscriber_;
     
     rclcpp::callback_group::CallbackGroup::SharedPtr callback_group_upd_subscribers_;
+    rclcpp::callback_group::CallbackGroup::SharedPtr callback_group_msg_receivals_;
 
     // mirroring of the current state of the desire set
     std::set<BDIManaged::ManagedDesire> desire_set_;
@@ -119,6 +124,12 @@ private:
 
     // handle acl msgs from other agents
     rclcpp::Service<ros2_bdi_interfaces::srv::AclSrv>::SharedPtr messaging_server_;
+
+    // A list of currently active conversations
+    std::vector<std::string> conversation_IDs_;
+
+    // A list of currently active conversation client nodes
+    std::vector<std::shared_ptr<ACLConversations::ConversationsClient>> conv_clients_;
 
 };
 
