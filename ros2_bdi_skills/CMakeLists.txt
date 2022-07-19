@@ -20,6 +20,7 @@ set(SKILLS-SOURCES
   src/bdi_action_executor.cpp
   src/ACLMessage.cpp
   src/conversations_client.cpp
+  src/MessageTemplate.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${SKILLS-SOURCES})
