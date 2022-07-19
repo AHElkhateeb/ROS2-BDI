@@ -22,7 +22,7 @@ namespace ACLConversations{
         public:
             ConversationsClient(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set);
 
-            void handleMsg(ACLMessage msg);
+            void receiveMsg(ACLMessage msg);
 
         private:
             // node to be spinned while making request

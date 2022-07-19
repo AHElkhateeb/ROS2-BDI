@@ -31,7 +31,7 @@ ConversationsClient::ConversationsClient(std::set<BDIManaged::ManagedDesire>* de
     RCLCPP_INFO(node_->get_logger(), "ConvID not found, Node Created");
 }
 
-void ConversationsClient::handleMsg(ACLMessage msg)
+void ConversationsClient::receiveMsg(ACLMessage msg)
 {
     RCLCPP_INFO(node_->get_logger(), "Before 10 second sleep, ConvID: " + msg.getConversationId());
     int x= (*belief_set_.begin()).pddlType();

@@ -203,7 +203,7 @@ void ACLCommunicator::handleMsgReceived(const AclSrv::Request::SharedPtr request
       conv_clients_.push_back(std::make_shared<ACLConversations::ConversationsClient>(&desire_set_, &belief_set_));
       
       RCLCPP_INFO(this->get_logger(), "ConvID: " + msg_received.getConversationId() + " added and will be dispatched");
-      conv_clients_.back()->handleMsg(msg_received);
+      conv_clients_.back()->receiveMsg(msg_received);
     }
   else //Found
     {
@@ -213,7 +213,7 @@ void ACLCommunicator::handleMsgReceived(const AclSrv::Request::SharedPtr request
       RCLCPP_INFO(this->get_logger(), "ConvID: " + msg_received.getConversationId() + " found and will be dispatched");
       //dispatch to the found ConversationClient Node;
       int index = itr - conversation_IDs_.begin();
-      conv_clients_[index]->handleMsg(msg_received);
+      conv_clients_[index]->receiveMsg(msg_received);
     }
 
   //replies to request with true for message being received
