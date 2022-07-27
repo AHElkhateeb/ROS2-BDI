@@ -10,7 +10,7 @@
 
 #include "rclcpp/rclcpp.hpp"
 
-#include"ros2_bdi_skills/ACLMessage.hpp"
+#include"ros2_bdi_behaviours/ACLMessage.hpp"
 
 namespace ACLConversations{
 
@@ -22,7 +22,7 @@ namespace ACLConversations{
         public:
             ConversationsClient(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set);
 
-            void receiveMsg(ACLMessage msg);
+            virtual void receiveMsg(ACLMessage msg);
 
         private:
             // node to be spinned while making request

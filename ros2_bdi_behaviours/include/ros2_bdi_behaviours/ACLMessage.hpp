@@ -38,23 +38,22 @@ public:
 	void addReplyTo(string reply_to);
 	void clearAllReceiver();
 	void clearAllReplyTo();
-	string currentTimeMillis(); //TO-DO should be moved somewhere else
-	ACLMessage 	createReply();
-	std::pair<vector<string>::iterator, vector<string>::iterator> getAllReplyTo();
-	string getContent();
-	string getConversationId();
-	string getEncoding();
-	string getInReplyTo();
-	string getLanguage();
-	ros2_bdi_interfaces::msg::AclMsg getMessage();
-	string getOntology();
-	string getPerformative();
-	string getProtocol();
-	vector<string> getReceiver();
-	vector<string> getReplyTo();
-	float getReplyBy();
-	string getReplyWith();
-	string getSender();
+	string currentTimeMillis() const; //TO-DO should be moved somewhere else
+	ACLMessage 	createReply() const;
+	string getContent() const;
+	string getConversationId() const;
+	string getEncoding() const;
+	string getInReplyTo() const;
+	string getLanguage() const;
+	ros2_bdi_interfaces::msg::AclMsg getMessage() const;
+	string getOntology() const;
+	string getPerformative() const;
+	string getProtocol() const;
+	vector<string> getReceiver() const;
+	vector<string> getReplyTo() const;
+	float getReplyBy() const;
+	string getReplyWith() const;
+	string getSender() const;
 	bool removeReceiver(string receiver);
 	bool removeReplyTo(string reply_to);
 	void reset();
@@ -69,7 +68,7 @@ public:
 	void setReplyBy(float reply_by);
 	void setReplyWith(string reply_with);
 	void setSender(string sender);
-	ACLMessage shallowClone();
+	ACLMessage shallowClone() const;
 };
 
 

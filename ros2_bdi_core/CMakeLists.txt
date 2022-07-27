@@ -17,7 +17,7 @@ find_package(plansys2_planner REQUIRED)
 find_package(plansys2_pddl_parser REQUIRED)
 find_package(ros2_bdi_utils REQUIRED)
 find_package(ros2_bdi_interfaces REQUIRED)
-find_package(ros2_bdi_skills REQUIRED)
+find_package(ros2_bdi_behaviours REQUIRED)
 
 find_library(yaml-cpp REQUIRED)
 
@@ -109,7 +109,7 @@ target_link_libraries(plansys2_monitor
 add_executable(acl_communicator src/acl_communicator.cpp)
 ament_target_dependencies(acl_communicator 
   ${common_dependencies}
-  ros2_bdi_skills
+  ros2_bdi_behaviours
 )
 # link plansys2_monitor to ros2_bdi_core library since it makes usage of plansys2_monitor_client 
 target_link_libraries(acl_communicator

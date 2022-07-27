@@ -1,27 +1,26 @@
 cmake_minimum_required(VERSION 3.5)
-project(ros2_bdi_skills)
+project(ros2_bdi_behaviours)
 
 # Default to C++17
 set(CMAKE_CXX_STANDARD 17)
 
 # find dependencies
-find_package(ament_cmake REQUIRED)
+find_package(ament_cmake REQUIRED) 
 find_package(rclcpp REQUIRED)
-find_package(plansys2_executor REQUIRED)
 find_package(ros2_bdi_interfaces REQUIRED)
 find_package(ros2_bdi_utils REQUIRED)
-find_package(ros2_bdi_core REQUIRED)
 
 include_directories(include)
 
-set(SKILLS-SOURCES
-  src/sensor.cpp
-  src/communications_client.cpp
-  src/bdi_action_executor.cpp
+set(BEHAVIOURS-SOURCES
+  src/CNETResponderBehaviour.cpp
+  src/ACLMessage.cpp
+  src/conversations_client.cpp
+  src/MessageTemplate.cpp
 )
 
-add_library(${PROJECT_NAME} SHARED ${SKILLS-SOURCES})
-ament_target_dependencies(${PROJECT_NAME} rclcpp ros2_bdi_interfaces ros2_bdi_utils ros2_bdi_core plansys2_executor)
+add_library(${PROJECT_NAME} SHARED ${BEHAVIOURS-SOURCES})
+ament_target_dependencies(${PROJECT_NAME} ros2_bdi_interfaces ros2_bdi_utils)
 
 install(DIRECTORY include/
   DESTINATION include/

@@ -21,9 +21,10 @@
 
 #include "rclcpp/rclcpp.hpp"
 
-#include "ros2_bdi_skills/conversations_client.hpp"
+#include "ros2_bdi_behaviours/conversations_client.hpp"
+#include "ros2_bdi_behaviours/CNETResponderBehaviour.hpp"
 
-#include "ros2_bdi_skills/ACLMessage.hpp"
+#include "ros2_bdi_behaviours/ACLMessage.hpp"
 
 class ACLCommunicator : public rclcpp::Node
 {

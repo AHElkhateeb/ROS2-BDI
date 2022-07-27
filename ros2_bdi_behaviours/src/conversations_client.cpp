@@ -1,10 +1,6 @@
-#include "ros2_bdi_skills/conversations_client.hpp"
+#include "ros2_bdi_behaviours/conversations_client.hpp"
 
-// Inner logic + ROS PARAMS & FIXED GLOBAL VALUES for ROS2 communications nodes (get services' names)
-#include "ros2_bdi_core/params/acl_communicator_params.hpp"
-
-//
-#include"ros2_bdi_skills/ACLMessage.hpp"
+#include"ros2_bdi_behaviours/ACLMessage.hpp"
 
 //seconds to wait before giving up on performing any request (service does not appear to be up)
 #define WAIT_SRV_UP 1   
@@ -23,6 +19,10 @@ using std::string;
 
 using ACLConversations::ConversationsClient;
 
+//APIs for current plan execution, adding/del belief, adding/del desire, maybe check desire/belief
+//adding and delition APIS should return a bool for succesful operation.
+//sendMessage() and other one in actions with different behaviour
+
 ConversationsClient::ConversationsClient(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set) : desire_set_{*desire_set} , belief_set_{*belief_set}
 {
     // node to perform async request to communication services of queried agent(s)
@@ -40,4 +40,8 @@ void ConversationsClient::receiveMsg(ACLMessage msg)
     RCLCPP_INFO(node_->get_logger(), "After 10 second sleep, ConvID: " + msg.getConversationId());
     x= (*(belief_set_.begin())).pddlType();
     RCLCPP_INFO(node_->get_logger(), "   pddlType: " + std::to_string(x));
+    
+    ACLMessage reply = msg.createReply();
+    reply.setContent("Agree");
+
 }

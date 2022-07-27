@@ -1,4 +1,4 @@
-#include"ros2_bdi_skills/ACLMessage.hpp"
+#include"ros2_bdi_behaviours/ACLMessage.hpp"
 
 using ros2_bdi_interfaces::msg::AclMsg;
 
@@ -57,7 +57,7 @@ using ros2_bdi_interfaces::msg::AclMsg;
 		reply_to_.clear();
 	}
 
-	string ACLMessage::currentTimeMillis() //TO-DO should be moved somewhere else
+	string ACLMessage::currentTimeMillis()  const //TO-DO should be moved somewhere else
 	{
 		auto time = std::chrono::system_clock::now();
 		auto since_epoch = time.time_since_epoch();
@@ -65,20 +65,21 @@ using ros2_bdi_interfaces::msg::AclMsg;
 		return std::to_string(millis.count());
 	}
 
-	ACLMessage 	ACLMessage::createReply()
+	ACLMessage 	ACLMessage::createReply() const
 	{
 		ACLMessage m = ACLMessage(performative_);
-		auto it = getAllReplyTo();
-		if(it.first == it.second)
+		auto it_begin =reply_to_.begin();
+		auto it_end =reply_to_.end();
+		if(it_begin == it_end)
 		{ 
 			m.addReceiver(sender_); 
 		}
 		else
 		{
-			while(it.first != it.second)
+			while(it_begin != it_end)
 			{
-				m.addReceiver(*it.first);
-				advance(it.first, 1);
+				m.addReceiver(*it_begin);
+				advance(it_begin, 1);
 			}
 		}
 		m.setLanguage(language_);
@@ -95,37 +96,32 @@ using ros2_bdi_interfaces::msg::AclMsg;
 		return m; 		
 	}
 
-	std::pair<vector<string>::iterator, vector<string>::iterator> ACLMessage::getAllReplyTo()
-	{
-		return std::make_pair(reply_to_.begin(), reply_to_.end());
-	}
-
-	string ACLMessage::getContent()
+	string ACLMessage::getContent() const
 	{
 		return content_;
 	}
 
-	string ACLMessage::getConversationId()
+	string ACLMessage::getConversationId() const
 	{
 		return conversation_id_;
 	}
 
-	string ACLMessage::getEncoding()
+	string ACLMessage::getEncoding() const
 	{
 		return encoding_;
 	}
 
-	string ACLMessage::getInReplyTo()
+	string ACLMessage::getInReplyTo() const
 	{
 		return in_reply_to_;
 	}
 
-	string ACLMessage::getLanguage()
+	string ACLMessage::getLanguage() const
 	{
 		return language_;
 	}
 
-	AclMsg ACLMessage::getMessage()
+	AclMsg ACLMessage::getMessage() const
 	{
 		AclMsg msg = AclMsg();
 		msg.performative = performative_;
@@ -144,42 +140,42 @@ using ros2_bdi_interfaces::msg::AclMsg;
 		return msg;
 	}
 
-	string ACLMessage::getOntology()
+	string ACLMessage::getOntology() const
 	{
 		return ontology_;
 	}
 
-	string ACLMessage::getPerformative()
+	string ACLMessage::getPerformative() const
 	{
 		return performative_;
 	}
 
-	string ACLMessage::getProtocol()
+	string ACLMessage::getProtocol() const
 	{
 		return protocol_;
 	}
 
-	vector<string> ACLMessage::getReceiver()
+	vector<string> ACLMessage::getReceiver() const
 	{
 		return receiver_;
 	}
 	
-	vector<string> ACLMessage::getReplyTo()
+	vector<string> ACLMessage::getReplyTo() const
 	{
 		return reply_to_;
 	}
 
-	float ACLMessage::getReplyBy()
+	float ACLMessage::getReplyBy() const
 	{
 		return reply_by_;
 	}
 
-	string ACLMessage::getReplyWith()
+	string ACLMessage::getReplyWith() const
 	{
 		return reply_with_;
 	}
 
-	string ACLMessage::getSender()
+	string ACLMessage::getSender() const
 	{
 		return sender_;
 	}
@@ -278,7 +274,7 @@ using ros2_bdi_interfaces::msg::AclMsg;
 		sender_= sender;
 	}
 
-	ACLMessage ACLMessage::shallowClone()
+	ACLMessage ACLMessage::shallowClone() const
 	{
 		ACLMessage result = ACLMessage(performative_);
 		//TO-DO most probably wrong access of private variables use methods instead
