@@ -67,6 +67,7 @@ void CfpEvaluation::react(ContractNetResponder* contractNetResponder, MsgReceive
       {
         std::cout << "CfpEvaluation state: REJECT message received" << std::endl;
         contractNetResponder->last_message = Message.msg;
+        contractNetResponder->handleRejectProposal(contractNetResponder->last_message);
         contractNetResponder->setState(EndProtocol::getInstance());
       }
       else
