@@ -196,11 +196,7 @@ void ACLCommunicator::handleMsgReceived(const AclSrv::Request::SharedPtr request
       //add to list of conversations and dispatch a new ConversationClient Node;
       conversation_IDs_.push_back(msg_received.getConversationId());
 
-      auto type = msg_received.getProtocol();
-  
-      auto role = msg_received.getPerformative(); //CFP && type is CNET use the CNET responder class
-
-      conv_clients_.push_back(std::make_shared<ACLConversations::ConversationsClient>(&desire_set_, &belief_set_));
+      conv_clients_.push_back(std::make_shared<ContractNetResponder>(&desire_set_, &belief_set_));
       
       RCLCPP_INFO(this->get_logger(), "ConvID: " + msg_received.getConversationId() + " added and will be dispatched");
       conv_clients_.back()->receiveMsg(msg_received);
