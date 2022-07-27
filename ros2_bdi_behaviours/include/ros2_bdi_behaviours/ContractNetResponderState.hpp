@@ -1,5 +1,5 @@
 #pragma once
-#include "ContractNetResponder.hpp"
+#include "ros2_bdi_behaviours/ContractNetResponder.hpp"
 
 // Forward declaration to resolve circular dependency/include
 class ContractNetResponder;

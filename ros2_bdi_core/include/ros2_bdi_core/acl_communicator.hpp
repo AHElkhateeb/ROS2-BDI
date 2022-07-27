@@ -22,7 +22,7 @@
 #include "rclcpp/rclcpp.hpp"
 
 #include "ros2_bdi_behaviours/conversations_client.hpp"
-#include "ros2_bdi_behaviours/CNETResponderBehaviour.hpp"
+#include "ros2_bdi_behaviours/ContractNetResponder.hpp"
 
 #include "ros2_bdi_behaviours/ACLMessage.hpp"
 

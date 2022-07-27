@@ -1,9 +1,7 @@
 #pragma once
-#include "ContractNetResponderState.hpp"
-#include "ACLMessage.hpp"
-#include "conversations_client.hpp"
-
-#include <iostream>
+#include "ros2_bdi_behaviours/ContractNetResponderState.hpp"
+#include "ros2_bdi_behaviours/ACLMessage.hpp"
+#include "ros2_bdi_behaviours/conversations_client.hpp"
 
 using ACLConversations::ConversationsClient;
 

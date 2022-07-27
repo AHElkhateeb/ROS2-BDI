@@ -1,6 +1,6 @@
 #pragma once
-#include "ContractNetResponderState.hpp"
-#include "ContractNetResponder.hpp"
+#include "ros2_bdi_behaviours/ContractNetResponderState.hpp"
+#include "ros2_bdi_behaviours/ContractNetResponder.hpp"
 
 // ----------------------------------------------------------------------------
 // State: EndProtocol
