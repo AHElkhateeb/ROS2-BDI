@@ -26,6 +26,7 @@ public:
 
 	void receiveMsg(ACLMessage msg) override
   	{
+		inbox.push_back(msg);
     	MsgReceived Message;
     	Message.msg = msg;
     	react(Message);
@@ -35,10 +36,11 @@ public:
 	void react(ActionOver const & event);
 
 	virtual ACLMessage handleCfp(ACLMessage cfp) { return ACLMessage();};
-	virtual ACLMessage handleAcceptProposal(ACLMessage cfp) { return ACLMessage();};
-	virtual void handleRejectProposal(ACLMessage cfp) { };
+	virtual ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose,ACLMessage accept) { return ACLMessage();};
+	virtual void handleRejectProposal(ACLMessage cfp, ACLMessage propose, ACLMessage reject) { };
 
-	ACLMessage last_message;
+	ACLMessage cfp, propose, accept, inform, reject;
+	std::vector<ACLMessage> inbox;
 
 private:
 	ContractNetResponderState* currentState;
