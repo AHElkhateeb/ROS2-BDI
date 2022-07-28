@@ -22,6 +22,7 @@ using ACLConversations::ConversationsClient;
 //APIs for current plan execution, adding/del belief, adding/del desire, maybe check desire/belief
 //adding and delition APIS should return a bool for succesful operation.
 //sendMessage() and other one in actions with different behaviour
+//Check that the message to be sent as an output of the handler functions follows the protocol message performatives
 
 ConversationsClient::ConversationsClient(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set) : desire_set_{*desire_set} , belief_set_{*belief_set}
 {
