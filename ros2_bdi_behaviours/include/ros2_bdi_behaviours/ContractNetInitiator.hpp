@@ -1,7 +1,7 @@
 #pragma once
-#include "ContractNetInitiatorState.hpp"
-#include "ACLMessage.hpp"
-#include "conversations_client.hpp"
+#include "ros2_bdi_behaviours/ContractNetInitiatorState.hpp"
+#include "ros2_bdi_behaviours/ACLMessage.hpp"
+#include "ros2_bdi_behaviours/conversations_client.hpp"
 
 using ACLConversations::ConversationsClient;
 

@@ -1,4 +1,4 @@
-#include "ConcreteContractNetInitiatorStates.hpp"
+#include "ros2_bdi_behaviours/ConcreteContractNetInitiatorStates.hpp"
 
 // ----------------------------------------------------------------------------
 // State: EndProtocol

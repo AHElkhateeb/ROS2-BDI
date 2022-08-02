@@ -1,5 +1,5 @@
-#include "ContractNetInitiator.hpp"
-#include "ConcreteContractNetInitiatorStates.hpp"
+#include "ros2_bdi_behaviours/ContractNetInitiator.hpp"
+#include "ros2_bdi_behaviours/ConcreteContractNetInitiatorStates.hpp"
 
 ContractNetInitiator::ContractNetInitiator(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set) : ConversationsClient(desire_set, belief_set)
 {

@@ -1,6 +1,6 @@
 #pragma once
-#include "ContractNetInitiatorState.hpp"
-#include "ContractNetInitiator.hpp"
+#include "ros2_bdi_behaviours/ContractNetInitiatorState.hpp"
+#include "ros2_bdi_behaviours/ContractNetInitiator.hpp"
 
 // ----------------------------------------------------------------------------
 // State: EndProtocol

@@ -1,5 +1,5 @@
 #pragma once
-#include "ContractNetInitiator.hpp"
+#include "ros2_bdi_behaviours/ContractNetInitiator.hpp"
 
 // Forward declaration to resolve circular dependency/include
 class ContractNetInitiator;
