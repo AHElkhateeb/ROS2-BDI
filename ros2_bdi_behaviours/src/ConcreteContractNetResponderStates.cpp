@@ -9,7 +9,9 @@ void EndProtocol::react(ContractNetResponder* contractNetResponder, ActionOver c
 
 void EndProtocol::entry(ContractNetResponder* contractNetResponder)
 {
-	//deleteConvIDSharedPointer();
+	//deletes ConvID SharedPointer
+  auto convID = std_msgs::msg::String().set__data(contractNetResponder->cfp.getConversationId());
+  contractNetResponder->del_conv_client_publisher_->publish(convID);
 }
 
 // ----------------------------------------------------------------------------
@@ -35,6 +37,7 @@ void PerformAction::react(ContractNetResponder* contractNetResponder, MsgReceive
     else
     {
       std::cout << "PerformAction state: Out of sequence message received" << std::endl;
+      //send a NOT-UNDERSTOOD msg to communicate communication problems.
     }
 }
 
@@ -71,7 +74,10 @@ void CfpEvaluation::react(ContractNetResponder* contractNetResponder, MsgReceive
         contractNetResponder->setState(EndProtocol::getInstance());
       }
       else
-      	std::cout << "CfpEvaluation state: Out of sequence message received" << std::endl;
+      	{
+          std::cout << "CfpEvaluation state: Out of sequence message received" << std::endl;
+          //send a NOT-UNDERSTOOD msg to communicate communication problems.
+        }
 }
 
 
@@ -94,5 +100,8 @@ void ReceiveCfp::react(ContractNetResponder* contractNetResponder, MsgReceived c
         contractNetResponder->setState(CfpEvaluation::getInstance());
       }
     else
-      std::cout << "ReceiveCfp state: Out of sequence message received" << std::endl;
+      {
+        std::cout << "ReceiveCfp state: Out of sequence message received" << std::endl;
+        //send a NOT-UNDERSTOOD msg to communicate communication problems.
+      }
 }

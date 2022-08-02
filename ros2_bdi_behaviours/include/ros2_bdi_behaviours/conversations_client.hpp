@@ -9,6 +9,7 @@
 #include "ros2_bdi_utils/ManagedDesire.hpp"
 
 #include "rclcpp/rclcpp.hpp"
+#include "std_msgs/msg/string.hpp"
 
 #include"ros2_bdi_behaviours/ACLMessage.hpp"
 
@@ -23,6 +24,9 @@ namespace ACLConversations{
             ConversationsClient(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set);
 
             virtual void receiveMsg(ACLMessage msg);
+
+            //del_conv publisher
+            rclcpp::Publisher<std_msgs::msg::String>::SharedPtr del_conv_client_publisher_;
 
         private:
             // node to be spinned while making request

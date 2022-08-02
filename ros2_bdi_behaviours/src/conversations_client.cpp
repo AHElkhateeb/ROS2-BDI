@@ -2,6 +2,9 @@
 
 #include"ros2_bdi_behaviours/ACLMessage.hpp"
 
+// Inner logic + ROS2 PARAMS & FIXED GLOBAL VALUES for Communications (Multi-Agent) Request Handler node
+#include "ros2_bdi_core/params/acl_communicator_params.hpp"
+
 //seconds to wait before giving up on performing any request (service does not appear to be up)
 #define WAIT_SRV_UP 1   
 
@@ -30,6 +33,8 @@ ConversationsClient::ConversationsClient(std::set<BDIManaged::ManagedDesire>* de
     // make the node spin just while waiting response or until timeout is reached
     node_ = rclcpp::Node::make_shared("conversations_client");
     RCLCPP_INFO(node_->get_logger(), "ConvID not found, Node Created");
+
+    del_conv_client_publisher_ = node_->create_publisher<std_msgs::msg::String>(DEL_CONV_TOPIC, 10);
 }
 
 void ConversationsClient::receiveMsg(ACLMessage msg)

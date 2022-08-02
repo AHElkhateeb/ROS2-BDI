@@ -20,6 +20,7 @@
 #include "ros2_bdi_core/support/plansys2_monitor_client.hpp"
 
 #include "rclcpp/rclcpp.hpp"
+#include "std_msgs/msg/string.hpp"
 
 #include "ros2_bdi_behaviours/conversations_client.hpp"
 #include "ros2_bdi_behaviours/ContractNetResponder.hpp"
@@ -60,7 +61,7 @@ private:
         The desire set has been updated
     */
     void updatedDesireSet(const ros2_bdi_interfaces::msg::DesireSet::SharedPtr msg);
-
+    
     /*
       @updIndex to be used to know which lock has to be checked among the two in belief_set_upd_locks_
       and which waiting counter has to be incremented and/or checked
@@ -87,9 +88,10 @@ private:
     std::set<BDIManaged::ManagedBelief> belief_set_;
     // belief set update subscription
     rclcpp::Subscription<ros2_bdi_interfaces::msg::BeliefSet>::SharedPtr belief_set_subscriber_;
-    
+
     rclcpp::callback_group::CallbackGroup::SharedPtr callback_group_upd_subscribers_;
     rclcpp::callback_group::CallbackGroup::SharedPtr callback_group_msg_receivals_;
+    rclcpp::callback_group::CallbackGroup::SharedPtr callback_group_del_conv_clients_;    
 
     // mirroring of the current state of the desire set
     std::set<BDIManaged::ManagedDesire> desire_set_;
@@ -126,11 +128,19 @@ private:
     // handle acl msgs from other agents
     rclcpp::Service<ros2_bdi_interfaces::srv::AclSrv>::SharedPtr messaging_server_;
 
-    // A list of currently active conversations
-    std::vector<std::string> conversation_IDs_;
+    //map of conversations
+    std::map<std::string, std::shared_ptr<ACLConversations::ConversationsClient>> conversations;
 
-    // A list of currently active conversation client nodes
-    std::vector<std::shared_ptr<ACLConversations::ConversationsClient>> conv_clients_;
+    //
+    rclcpp::Subscription<std_msgs::msg::String>::SharedPtr del_conv_clients_subscriber_;
+
+    /*
+        The desire set has been updated
+    */
+    void deleteConversationclients(const std_msgs::msg::String::SharedPtr msg);
+
+    // lock to prevent addition/deletion of convID simultaneously
+    std::mutex conv_clients_upd_lock_;
 
 };
 

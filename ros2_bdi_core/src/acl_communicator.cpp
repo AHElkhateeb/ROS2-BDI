@@ -75,6 +75,15 @@ void ACLCommunicator::init()
   messaging_server_ = this->create_service<AclSrv>(ACL_SRV, 
       bind(&ACLCommunicator::handleMsgReceived, this, _1, _2), rmw_qos_profile_services_default, callback_group_msg_receivals_);
   
+  // to remove conversation clients from the conv_clients_ set and make callbacks run on same thread of execution wrt srv callbacks
+  callback_group_del_conv_clients_ = this->create_callback_group(rclcpp::callback_group::CallbackGroupType::MutuallyExclusive);
+  auto del_conv_clients_opt = rclcpp::SubscriptionOptions();
+  del_conv_clients_opt.callback_group = callback_group_del_conv_clients_;
+
+  del_conv_clients_subscriber_ = this->create_subscription<std_msgs::msg::String>(
+              DEL_CONV_TOPIC, qos_keep_all,
+              bind(&ACLCommunicator::deleteConversationclients, this, _1), del_conv_clients_opt);
+
   // add belief publisher -> to publish on the topic and alter the belief set when the request can go through
   add_belief_publisher_ = this->create_publisher<Belief>(ADD_BELIEF_TOPIC, 10);
   // del belief publisher -> to publish on the topic and alter the belief set when the request can go through
@@ -181,35 +190,41 @@ void ACLCommunicator::updatedBeliefSet(const BeliefSet::SharedPtr msg)
     checkBeliefSetWaitingUpd(DEL_I, 0);//check belief set for deletion
 }
 
+/*
+    Deletes ConvID from set
+*/
+void ACLCommunicator::deleteConversationclients(const std_msgs::msg::String::SharedPtr msg)
+{
+  //Mutex with addition of conversations
+  conv_clients_upd_lock_.lock();
+  conversations.erase(msg->data);
+  conv_clients_upd_lock_.unlock();
+}
+
 /*  
     ACL message service handler        
 */
 void ACLCommunicator::handleMsgReceived(const AclSrv::Request::SharedPtr request,
     const AclSrv::Response::SharedPtr response)
 {
-  ACLMessage msg_received = ACLMessage(request->msg); 
+  ACLMessage msg_received = ACLMessage(request->msg);
 
-  auto itr = std::find(conversation_IDs_.begin(), conversation_IDs_.end(), msg_received.getConversationId());
+  conv_clients_upd_lock_.lock();
   
-  if(itr == conversation_IDs_.end()) //NotFound
+  if(conversations.find(msg_received.getConversationId()) == conversations.end()) //NotFound
     {
-      //add to list of conversations and dispatch a new ConversationClient Node;
-      conversation_IDs_.push_back(msg_received.getConversationId());
-
-      conv_clients_.push_back(std::make_shared<ContractNetResponder>(&desire_set_, &belief_set_));
-      
+      //add to list of conversations and dispatch a new ConversationClient Node
+      conversations[ msg_received.getConversationId() ] = std::make_shared<ContractNetResponder>(&desire_set_, &belief_set_);
+      conv_clients_upd_lock_.unlock();
       RCLCPP_INFO(this->get_logger(), "ConvID: " + msg_received.getConversationId() + " added and will be dispatched");
-      conv_clients_.back()->receiveMsg(msg_received);
+      conversations[ msg_received.getConversationId() ]->receiveMsg(msg_received);
     }
   else //Found
     {
-      i++;
-      belief_set_.clear();
-      belief_set_.insert(ManagedBelief("1st Belief was added",i,{"",""},2.3f));
+      conv_clients_upd_lock_.unlock();
       RCLCPP_INFO(this->get_logger(), "ConvID: " + msg_received.getConversationId() + " found and will be dispatched");
       //dispatch to the found ConversationClient Node;
-      int index = itr - conversation_IDs_.begin();
-      conv_clients_[index]->receiveMsg(msg_received);
+      conversations[ msg_received.getConversationId() ]->receiveMsg(msg_received);
     }
 
   //replies to request with true for message being received
