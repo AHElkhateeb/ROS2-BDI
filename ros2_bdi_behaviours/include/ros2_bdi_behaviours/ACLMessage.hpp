@@ -49,7 +49,7 @@ public:
 	string getOntology() const;
 	string getPerformative() const;
 	string getProtocol() const;
-	vector<string> getReceiver() const;
+	vector<string> getReceivers() const;
 	vector<string> getReplyTo() const;
 	float getReplyBy() const;
 	string getReplyWith() const;

@@ -155,7 +155,7 @@ using ros2_bdi_interfaces::msg::AclMsg;
 		return protocol_;
 	}
 
-	vector<string> ACLMessage::getReceiver() const
+	vector<string> ACLMessage::getReceivers() const
 	{
 		return receiver_;
 	}
