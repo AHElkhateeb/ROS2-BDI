@@ -14,7 +14,7 @@ void ContractNetResponder::setState(ContractNetResponderState& newState)
 	currentState->entry(this); // do stuff after we change state
 }
 
-void ContractNetResponder::react(MsgReceived const & event)
+void ContractNetResponder::react(ACLMessage const & event)
 {
 	// Delegate the task of determining the next state to the current state
 	currentState->react(this, event);

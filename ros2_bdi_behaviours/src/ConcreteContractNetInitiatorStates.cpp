@@ -4,7 +4,7 @@
 // State: EndProtocol
 //
 void EndProtocol::exit(ContractNetInitiator* contractNetInitiator){}
-void EndProtocol::react(ContractNetInitiator* contractNetInitiator, MsgReceived const & Message){}
+void EndProtocol::react(ContractNetInitiator* contractNetInitiator, ACLMessage const & Message){}
 void EndProtocol::entry(ContractNetInitiator* contractNetInitiator)
 {
   //deletes ConvID SharedPointer
@@ -21,23 +21,23 @@ void WaitForResult::entry(ContractNetInitiator* contractNetInitiator)
   std::cout << "WaitForResult state: Waiting for result " << std::endl;
 }
 
-void WaitForResult::react(ContractNetInitiator* contractNetInitiator, MsgReceived const & Message)
+void WaitForResult::react(ContractNetInitiator* contractNetInitiator, ACLMessage const & Message)
 {
-  if(Message.msg.getPerformative()=="INFORM")
+  if(Message.getPerformative()=="INFORM")
   {
-    contractNetInitiator->informs.push_back(Message.msg);
-    contractNetInitiator->handleInform(Message.msg);
+    contractNetInitiator->informs.push_back(Message);
+    contractNetInitiator->handleInform(Message);
   }
-  else if(Message.msg.getPerformative()=="FAILURE")
+  else if(Message.getPerformative()=="FAILURE")
   {
-    contractNetInitiator->informs.push_back(Message.msg);
-    contractNetInitiator->handleFailure(Message.msg);
+    contractNetInitiator->informs.push_back(Message);
+    contractNetInitiator->handleFailure(Message);
   }
   else
   {
-    contractNetInitiator->informs.push_back(Message.msg);
+    contractNetInitiator->informs.push_back(Message);
     std::cout << "StoreBids state: Out of sequence message received" << std::endl;
-    contractNetInitiator->handleNotUnderstood(Message.msg);
+    contractNetInitiator->handleNotUnderstood(Message);
     //send a NOT-UNDERSTOOD msg to communicate communication problems.
   }
 
@@ -50,7 +50,7 @@ void WaitForResult::react(ContractNetInitiator* contractNetInitiator, MsgReceive
 // ----------------------------------------------------------------------------
 // State: EvaluateBids
 //
-void EvaluateBids::react(ContractNetInitiator* contractNetInitiator, MsgReceived const & Message){}
+void EvaluateBids::react(ContractNetInitiator* contractNetInitiator, ACLMessage const & Message){}
 void EvaluateBids::exit(ContractNetInitiator* contractNetInitiator){}
 void EvaluateBids::entry(ContractNetInitiator* contractNetInitiator)
 {
@@ -79,23 +79,23 @@ void EvaluateBids::entry(ContractNetInitiator* contractNetInitiator)
 void StoreBids::entry(ContractNetInitiator* contractNetInitiator){}
 void StoreBids::exit(ContractNetInitiator* contractNetInitiator){}
 
-void StoreBids::react(ContractNetInitiator* contractNetInitiator, MsgReceived const & Message)
+void StoreBids::react(ContractNetInitiator* contractNetInitiator, ACLMessage const & Message)
 {
-  if(Message.msg.getPerformative()=="PROPOSE")
+  if(Message.getPerformative()=="PROPOSE")
   {
-    contractNetInitiator->responses.push_back(Message.msg);
-    contractNetInitiator->handlePropose(Message.msg);
+    contractNetInitiator->responses.push_back(Message);
+    contractNetInitiator->handlePropose(Message);
   }
-  else if(Message.msg.getPerformative()=="REJECT")
+  else if(Message.getPerformative()=="REJECT")
   {
-    contractNetInitiator->responses.push_back(Message.msg);
-    contractNetInitiator->handleReject(Message.msg);
+    contractNetInitiator->responses.push_back(Message);
+    contractNetInitiator->handleReject(Message);
   }
   else
   {
-    contractNetInitiator->responses.push_back(Message.msg);
+    contractNetInitiator->responses.push_back(Message);
     std::cout << "StoreBids state: Out of sequence message received" << std::endl;
-    contractNetInitiator->handleNotUnderstood(Message.msg);
+    contractNetInitiator->handleNotUnderstood(Message);
     //send a NOT-UNDERSTOOD msg to communicate communication problems.
   }
 
@@ -108,12 +108,12 @@ void StoreBids::react(ContractNetInitiator* contractNetInitiator, MsgReceived co
 //
 void SendCfp::entry(ContractNetInitiator* contractNetInitiator){}
 void SendCfp::exit(ContractNetInitiator* contractNetInitiator){}
-void SendCfp::react(ContractNetInitiator* contractNetInitiator, MsgReceived const & Message)
+void SendCfp::react(ContractNetInitiator* contractNetInitiator, ACLMessage const & Message)
 {
-  if (Message.msg.getPerformative() == "CFP") //TO-DO: && Message.msg.getSender() == "this agent identifier" change it with this agent's ID parameter
+  if (Message.getPerformative() == "CFP") //TO-DO: && Message.getSender() == "this agent identifier" change it with this agent's ID parameter
     {
-      contractNetInitiator->cfp = Message.msg;
-      contractNetInitiator->nResponders = Message.msg.getReceivers().size();
+      contractNetInitiator->cfp = Message;
+      contractNetInitiator->nResponders = Message.getReceivers().size();
       std::cout << "SendCfp state: CFP message to be sent to " << contractNetInitiator->nResponders << " agents" << std::endl;
       //send(CFP)
       contractNetInitiator->setState(StoreBids::getInstance());

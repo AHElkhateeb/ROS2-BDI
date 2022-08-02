@@ -11,7 +11,6 @@ class ContractNetResponderState;
 // ----------------------------------------------------------------------------
 // Event declarations
 //
-struct MsgReceived{ ACLMessage msg; };
 struct ActionOver{};
 
 // ----------------------------------------------------------------------------
@@ -27,12 +26,10 @@ public:
 	void receiveMsg(ACLMessage msg) override
   	{
 		inbox.push_back(msg);
-    	MsgReceived Message;
-    	Message.msg = msg;
-    	react(Message);
+    	react(msg);
   	}
 
-	void react(MsgReceived const & event);
+	void react(ACLMessage const & event);
 	void react(ActionOver const & event);
 
 	virtual ACLMessage handleCfp(ACLMessage cfp) { return ACLMessage();};

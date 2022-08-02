@@ -4,7 +4,7 @@
 // State: EndProtocol
 //
 void EndProtocol::exit(ContractNetResponder* contractNetResponder){}
-void EndProtocol::react(ContractNetResponder* contractNetResponder, MsgReceived const & Message){}
+void EndProtocol::react(ContractNetResponder* contractNetResponder, ACLMessage const & Message){}
 void EndProtocol::react(ContractNetResponder* contractNetResponder, ActionOver const & Message){}
 
 void EndProtocol::entry(ContractNetResponder* contractNetResponder)
@@ -26,9 +26,9 @@ void PerformAction::entry(ContractNetResponder* contractNetResponder)
   contractNetResponder->react(ActionOver());
 }
 
-void PerformAction::react(ContractNetResponder* contractNetResponder, MsgReceived const & Message)
+void PerformAction::react(ContractNetResponder* contractNetResponder, ACLMessage const & Message)
 {
-	if (Message.msg.getPerformative() == "CANCEL")
+	if (Message.getPerformative() == "CANCEL")
     {
       std::cout << "PerformAction state: CANCEL message received" << std::endl;
       contractNetResponder->setState(EndProtocol::getInstance());
@@ -57,18 +57,18 @@ void CfpEvaluation::entry(ContractNetResponder* contractNetResponder)
 	//send the output of the handleCfp function
 }
 
-void CfpEvaluation::react(ContractNetResponder* contractNetResponder, MsgReceived const & Message)
+void CfpEvaluation::react(ContractNetResponder* contractNetResponder, ACLMessage const & Message)
 {
-	if (Message.msg.getPerformative() == "ACCEPT")
+	if (Message.getPerformative() == "ACCEPT")
       {
         std::cout << "CfpEvaluation state: ACCEPT message received" << std::endl;
-        contractNetResponder->accept = Message.msg;
+        contractNetResponder->accept = Message;
         contractNetResponder->setState(PerformAction::getInstance());
       }
-    else if (Message.msg.getPerformative() == "REJECT")
+    else if (Message.getPerformative() == "REJECT")
       {
         std::cout << "CfpEvaluation state: REJECT message received" << std::endl;
-        contractNetResponder->reject = Message.msg;
+        contractNetResponder->reject = Message;
         contractNetResponder->handleRejectProposal(contractNetResponder->cfp, contractNetResponder->propose, contractNetResponder->reject);
         contractNetResponder->setState(EndProtocol::getInstance());
       }
@@ -91,11 +91,11 @@ void ReceiveCfp::entry(ContractNetResponder* contractNetResponder)
 	std::cout << "Waiting for CFP" << std::endl;
 }
 
-void ReceiveCfp::react(ContractNetResponder* contractNetResponder, MsgReceived const & Message)
+void ReceiveCfp::react(ContractNetResponder* contractNetResponder, ACLMessage const & Message)
 {
-	if (Message.msg.getPerformative() == "CFP")
+	if (Message.getPerformative() == "CFP")
       {
-        contractNetResponder->cfp = Message.msg;
+        contractNetResponder->cfp = Message;
         std::cout << "ReceiveCfp state: CFP message received" << std::endl;
         contractNetResponder->setState(CfpEvaluation::getInstance());
       }

@@ -9,11 +9,6 @@ using ACLConversations::ConversationsClient;
 class ContractNetInitiatorState;
 
 // ----------------------------------------------------------------------------
-// Event declarations
-//
-struct MsgReceived{ ACLMessage msg; };
-
-// ----------------------------------------------------------------------------
 // ContractNetInitiator (FSM base class) declaration
 //
 class ContractNetInitiator : public ConversationsClient
@@ -25,12 +20,10 @@ public:
 
 	void receiveMsg(ACLMessage msg) override
   	{
-    	MsgReceived Message;
-    	Message.msg = msg;
-    	react(Message);
+    	react(msg);
   	}
 
-	void react(MsgReceived const & event);
+	void react(ACLMessage const & event);
 
 	//Probably will be kept empty in current implementation
 	virtual void handlePropose(ACLMessage propose) { };

@@ -9,7 +9,7 @@ class EndProtocol : public ContractNetInitiatorState
 {
 public:
 	void entry(ContractNetInitiator* contractNetInitiator);
-	void react(ContractNetInitiator* contractNetInitiator, MsgReceived const & Message);
+	void react(ContractNetInitiator* contractNetInitiator, ACLMessage const & Message);
 	void exit(ContractNetInitiator* contractNetInitiator);
 	static ContractNetInitiatorState& getInstance(){ static EndProtocol singleton; return singleton; }
 
@@ -26,7 +26,7 @@ class WaitForResult : public ContractNetInitiatorState
 {
 public:
 	void entry(ContractNetInitiator* contractNetInitiator);
-	void react(ContractNetInitiator* contractNetInitiator, MsgReceived const & Message);
+	void react(ContractNetInitiator* contractNetInitiator, ACLMessage const & Message);
 	void exit(ContractNetInitiator* contractNetInitiator);
 	static ContractNetInitiatorState& getInstance(){ static WaitForResult singleton; return singleton; }
 
@@ -43,7 +43,7 @@ class EvaluateBids : public ContractNetInitiatorState
 {
 public:
 	void entry(ContractNetInitiator* contractNetInitiator);
-	void react(ContractNetInitiator* contractNetInitiator, MsgReceived const & Message);
+	void react(ContractNetInitiator* contractNetInitiator, ACLMessage const & Message);
 	void exit(ContractNetInitiator* contractNetInitiator);
 	static ContractNetInitiatorState& getInstance(){ static EvaluateBids singleton; return singleton; }
 
@@ -60,7 +60,7 @@ class StoreBids : public ContractNetInitiatorState
 {
 public:
 	void entry(ContractNetInitiator* contractNetInitiator);
-	void react(ContractNetInitiator* contractNetInitiator, MsgReceived const & Message);
+	void react(ContractNetInitiator* contractNetInitiator, ACLMessage const & Message);
 	void exit(ContractNetInitiator* contractNetInitiator);
 	static ContractNetInitiatorState& getInstance(){ static StoreBids singleton; return singleton; }
 
@@ -77,7 +77,7 @@ class SendCfp : public ContractNetInitiatorState
 {
 public:
 	void entry(ContractNetInitiator* contractNetInitiator);
-	void react(ContractNetInitiator* contractNetInitiator, MsgReceived const & Message);
+	void react(ContractNetInitiator* contractNetInitiator, ACLMessage const & Message);
 	void exit(ContractNetInitiator* contractNetInitiator);
 	static ContractNetInitiatorState& getInstance(){ static SendCfp singleton; return singleton; }
 

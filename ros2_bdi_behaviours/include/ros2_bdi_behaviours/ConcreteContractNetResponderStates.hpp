@@ -9,7 +9,7 @@ class EndProtocol : public ContractNetResponderState
 {
 public:
 	void entry(ContractNetResponder* contractNetResponder);
-	void react(ContractNetResponder* contractNetResponder, MsgReceived const & Message);
+	void react(ContractNetResponder* contractNetResponder, ACLMessage const & Message);
 	void react(ContractNetResponder* contractNetResponder, ActionOver const & Message);
 	void exit(ContractNetResponder* contractNetResponder);
 	static ContractNetResponderState& getInstance(){ static EndProtocol singleton; return singleton; }
@@ -27,7 +27,7 @@ class PerformAction : public ContractNetResponderState
 {
 public:
 	void entry(ContractNetResponder* contractNetResponder);
-	void react(ContractNetResponder* contractNetResponder, MsgReceived const & Message);
+	void react(ContractNetResponder* contractNetResponder, ACLMessage const & Message);
 	void react(ContractNetResponder* contractNetResponder, ActionOver const & Message);
 	void exit(ContractNetResponder* contractNetResponder);
 	static ContractNetResponderState& getInstance(){ static PerformAction singleton; return singleton; }
@@ -45,7 +45,7 @@ class CfpEvaluation : public ContractNetResponderState
 {
 public:
 	void entry(ContractNetResponder* contractNetResponder);
-	void react(ContractNetResponder* contractNetResponder, MsgReceived const & Message);
+	void react(ContractNetResponder* contractNetResponder, ACLMessage const & Message);
 	void react(ContractNetResponder* contractNetResponder, ActionOver const & Message);
 	void exit(ContractNetResponder* contractNetResponder);
 	static ContractNetResponderState& getInstance(){ static CfpEvaluation singleton; return singleton; }
@@ -63,7 +63,7 @@ class ReceiveCfp : public ContractNetResponderState
 {
 public:
 	void entry(ContractNetResponder* contractNetResponder);
-	void react(ContractNetResponder* contractNetResponder, MsgReceived const & Message);
+	void react(ContractNetResponder* contractNetResponder, ACLMessage const & Message);
 	void react(ContractNetResponder* contractNetResponder, ActionOver const & Message);
 	void exit(ContractNetResponder* contractNetResponder);
 	static ContractNetResponderState& getInstance(){ static ReceiveCfp singleton; return singleton; }
