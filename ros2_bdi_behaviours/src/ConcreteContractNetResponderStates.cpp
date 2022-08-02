@@ -21,7 +21,6 @@ void PerformAction::exit(ContractNetResponder* contractNetResponder){}
 
 void PerformAction::entry(ContractNetResponder* contractNetResponder)
 {
-  contractNetResponder->accept = contractNetResponder->inbox.back();
   contractNetResponder->inform = contractNetResponder->handleAcceptProposal(contractNetResponder->cfp, contractNetResponder->propose, contractNetResponder->accept);
 	//send the output of the handleAcceptProposal function
   contractNetResponder->react(ActionOver());
@@ -54,7 +53,6 @@ void CfpEvaluation::react(ContractNetResponder* contractNetResponder, ActionOver
 
 void CfpEvaluation::entry(ContractNetResponder* contractNetResponder)
 {
-  contractNetResponder->cfp = contractNetResponder->inbox.back();
 	contractNetResponder->propose = contractNetResponder->handleCfp(contractNetResponder->cfp);
 	//send the output of the handleCfp function
 }
@@ -64,12 +62,13 @@ void CfpEvaluation::react(ContractNetResponder* contractNetResponder, MsgReceive
 	if (Message.msg.getPerformative() == "ACCEPT")
       {
         std::cout << "CfpEvaluation state: ACCEPT message received" << std::endl;
+        contractNetResponder->accept = Message.msg;
         contractNetResponder->setState(PerformAction::getInstance());
       }
     else if (Message.msg.getPerformative() == "REJECT")
       {
         std::cout << "CfpEvaluation state: REJECT message received" << std::endl;
-        contractNetResponder->reject = contractNetResponder->inbox.back();
+        contractNetResponder->reject = Message.msg;
         contractNetResponder->handleRejectProposal(contractNetResponder->cfp, contractNetResponder->propose, contractNetResponder->reject);
         contractNetResponder->setState(EndProtocol::getInstance());
       }
@@ -96,6 +95,7 @@ void ReceiveCfp::react(ContractNetResponder* contractNetResponder, MsgReceived c
 {
 	if (Message.msg.getPerformative() == "CFP")
       {
+        contractNetResponder->cfp = Message.msg;
         std::cout << "ReceiveCfp state: CFP message received" << std::endl;
         contractNetResponder->setState(CfpEvaluation::getInstance());
       }
