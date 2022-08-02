@@ -214,7 +214,7 @@ void ACLCommunicator::handleMsgReceived(const AclSrv::Request::SharedPtr request
   if(conversations.find(msg_received.getConversationId()) == conversations.end()) //NotFound
     {
       //add to list of conversations and dispatch a new ConversationClient Node
-      conversations[ msg_received.getConversationId() ] = std::make_shared<ContractNetResponder>(&desire_set_, &belief_set_);
+      conversations[ msg_received.getConversationId() ] = std::make_shared<ContractNetInitiator>(&desire_set_, &belief_set_);
       conv_clients_upd_lock_.unlock();
       RCLCPP_INFO(this->get_logger(), "ConvID: " + msg_received.getConversationId() + " added and will be dispatched");
       conversations[ msg_received.getConversationId() ]->receiveMsg(msg_received);

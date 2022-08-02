@@ -9,7 +9,7 @@
 	{
 		performative_ = msg.getPerformative();
 		sender_ = msg.getSender();
-		receiver_ = msg.getReceiver();
+		receiver_ = msg.getReceivers();
 		reply_to_ = msg.getReplyTo();
 		content_ = msg.getContent();
 		language_ = msg.getLanguage();

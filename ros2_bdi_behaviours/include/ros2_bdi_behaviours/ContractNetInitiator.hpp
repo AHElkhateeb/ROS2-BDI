@@ -38,7 +38,7 @@ public:
 	virtual void handleNotUnderstood(ACLMessage notUnderstood) { };
 	
 	virtual void handleFailure(ACLMessage failure) { };
-	virtual std::vector<ACLMessage> handleAllResponses(std::vector<ACLMessage> responses) { };
+	virtual std::vector<ACLMessage> handleAllResponses(std::vector<ACLMessage> responses) { return {ACLMessage("ACCEPT")}; };
 	virtual void handleInform(ACLMessage inform) { };
 	virtual void handleAllResultNotifications(std::vector<ACLMessage> resultNotifications) { }; //This method is called when all the result notification messages have been collected.
 	virtual void handleAllRejected() { };

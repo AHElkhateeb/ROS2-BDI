@@ -3,7 +3,7 @@
 #include"ros2_bdi_behaviours/ACLMessage.hpp"
 
 // Inner logic + ROS2 PARAMS & FIXED GLOBAL VALUES for Communications (Multi-Agent) Request Handler node
-#include "ros2_bdi_core/params/acl_communicator_params.hpp"
+#include "ros2_bdi_behaviours/params/conversations_client_params.hpp"
 
 //seconds to wait before giving up on performing any request (service does not appear to be up)
 #define WAIT_SRV_UP 1   
