@@ -1,5 +1,7 @@
 #include "ros2_bdi_behaviours/ConcreteContractNetInitiatorStates.hpp"
 
+using namespace InitiatorStates;
+
 // ----------------------------------------------------------------------------
 // State: EndProtocol
 //
@@ -59,7 +61,9 @@ void EvaluateBids::entry(ContractNetInitiator* contractNetInitiator)
   for(unsigned int i = 0; i < contractNetInitiator->acceptances.size(); i++)
   {
     if(contractNetInitiator->acceptances[i].getPerformative()=="ACCEPT")
+      {
       contractNetInitiator->nAcceptances++;
+      }
   }
   
   if(contractNetInitiator->nAcceptances > 0)

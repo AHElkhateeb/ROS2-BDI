@@ -1,5 +1,7 @@
 #include "ros2_bdi_behaviours/ConcreteContractNetResponderStates.hpp"
 
+using namespace ResponderStates;
+
 // ----------------------------------------------------------------------------
 // State: EndProtocol
 //

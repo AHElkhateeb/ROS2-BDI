@@ -1,6 +1,8 @@
 #include "ros2_bdi_behaviours/ContractNetResponder.hpp"
 #include "ros2_bdi_behaviours/ConcreteContractNetResponderStates.hpp"
 
+using namespace ResponderStates;
+
 ContractNetResponder::ContractNetResponder(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set) : ConversationsClient(desire_set, belief_set)
 {
 	// All ContractNetResponders are initially in ReceiveCfp state

@@ -1,6 +1,8 @@
 #include "ros2_bdi_behaviours/ContractNetInitiator.hpp"
 #include "ros2_bdi_behaviours/ConcreteContractNetInitiatorStates.hpp"
 
+using namespace InitiatorStates;
+
 ContractNetInitiator::ContractNetInitiator(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set) : ConversationsClient(desire_set, belief_set)
 {
 	// All ContractNetInitiators are initially in SendCfp state
