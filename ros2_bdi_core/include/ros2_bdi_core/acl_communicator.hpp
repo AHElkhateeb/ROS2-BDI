@@ -77,6 +77,11 @@ private:
     void updatedBeliefSet(const ros2_bdi_interfaces::msg::BeliefSet::SharedPtr msg);
 
     /*  
+        ACL incoming message handler        
+    */
+    void handleIncomingMsg(const ros2_bdi_interfaces::msg::AclMsg::SharedPtr msg);
+
+    /*  
         ACL message service handler        
     */
     void handleMsgReceived(const ros2_bdi_interfaces::srv::AclSrv::Request::SharedPtr request,
@@ -126,8 +131,12 @@ private:
     // PlanSys2 Monitor Client supporting nodes & clients for calling the {psys2_node}/get_state services
     std::shared_ptr<PlanSys2MonitorClient> psys2_monitor_client_;
 
-    // handle acl msgs from other agents
+    // handle acl msgs requests from other agents
     rclcpp::Service<ros2_bdi_interfaces::srv::AclSrv>::SharedPtr messaging_server_;
+
+    // handle incoming acl msgs
+    rclcpp::Subscription<ros2_bdi_interfaces::msg::AclMsg>::SharedPtr incoming_messages_sub_;
+    
 
     //map of conversations
     std::map<std::string, std::shared_ptr<ACLConversations::ConversationsClient>> conversations;

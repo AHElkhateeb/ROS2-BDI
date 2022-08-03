@@ -5,10 +5,12 @@ using namespace InitiatorStates;
 // ----------------------------------------------------------------------------
 // State: EndProtocol
 //
-void EndProtocol::exit(ContractNetInitiator* contractNetInitiator){}
+void EndProtocol::exit(ContractNetInitiator* contractNetInitiator){ std::cout << "Exiting EndProtocol state ... " << "nResponders: " << contractNetInitiator->nResponders << " nAcceptances: " << contractNetInitiator->nAcceptances << std::endl; }
 void EndProtocol::react(ContractNetInitiator* contractNetInitiator, ACLMessage const & Message){}
 void EndProtocol::entry(ContractNetInitiator* contractNetInitiator)
 {
+  std::cout << "Entering EndProtocol state ... " << "nResponders: " << contractNetInitiator->nResponders << " nAcceptances: " << contractNetInitiator->nAcceptances << std::endl;
+
   //deletes ConvID SharedPointer
   auto convID = std_msgs::msg::String().set__data(contractNetInitiator->cfp.getConversationId());
   contractNetInitiator->del_conv_client_publisher_->publish(convID);
@@ -17,9 +19,10 @@ void EndProtocol::entry(ContractNetInitiator* contractNetInitiator)
 // ----------------------------------------------------------------------------
 // State: WaitForResult
 //
-void WaitForResult::exit(ContractNetInitiator* contractNetInitiator){}
+void WaitForResult::exit(ContractNetInitiator* contractNetInitiator){ std::cout << "Exiting WaitForResult state ... " << "nResponders: " << contractNetInitiator->nResponders << " nAcceptances: " << contractNetInitiator->nAcceptances << std::endl; }
 void WaitForResult::entry(ContractNetInitiator* contractNetInitiator)
 {
+  std::cout << "Entering WaitForResult state ... " << "nResponders: " << contractNetInitiator->nResponders << " nAcceptances: " << contractNetInitiator->nAcceptances << std::endl;
   std::cout << "WaitForResult state: Waiting for result " << std::endl;
 }
 
@@ -38,11 +41,12 @@ void WaitForResult::react(ContractNetInitiator* contractNetInitiator, ACLMessage
   else
   {
     contractNetInitiator->informs.push_back(Message);
-    std::cout << "StoreBids state: Out of sequence message received" << std::endl;
+    std::cout << "WaitForResult state: Out of sequence message received" << std::endl;
     contractNetInitiator->handleNotUnderstood(Message);
     //send a NOT-UNDERSTOOD msg to communicate communication problems.
   }
 
+  std::cout << "WaitForResult state: No. of informs is " << contractNetInitiator->informs.size() << " No. of acceptances is " << contractNetInitiator->nAcceptances << std::endl;
   if(contractNetInitiator->informs.size() == contractNetInitiator->nAcceptances)
   {
     contractNetInitiator->handleAllResultNotifications(contractNetInitiator->informs);
@@ -53,16 +57,18 @@ void WaitForResult::react(ContractNetInitiator* contractNetInitiator, ACLMessage
 // State: EvaluateBids
 //
 void EvaluateBids::react(ContractNetInitiator* contractNetInitiator, ACLMessage const & Message){}
-void EvaluateBids::exit(ContractNetInitiator* contractNetInitiator){}
+void EvaluateBids::exit(ContractNetInitiator* contractNetInitiator){ std::cout << "Exiting EvaluateBids state ... " << "nResponders: " << contractNetInitiator->nResponders << " nAcceptances: " << contractNetInitiator->nAcceptances << std::endl; }
 void EvaluateBids::entry(ContractNetInitiator* contractNetInitiator)
 {
+  std::cout << "Entering EvaluateBids state ... " << "nResponders: " << contractNetInitiator->nResponders << " nAcceptances: " << contractNetInitiator->nAcceptances << std::endl;
+
   contractNetInitiator->acceptances = contractNetInitiator->handleAllResponses(contractNetInitiator->responses);
   //send(contractNetInitiator->acceptances)
   for(unsigned int i = 0; i < contractNetInitiator->acceptances.size(); i++)
   {
     if(contractNetInitiator->acceptances[i].getPerformative()=="ACCEPT")
       {
-      contractNetInitiator->nAcceptances++;
+        contractNetInitiator->nAcceptances++;
       }
   }
   
@@ -80,8 +86,8 @@ void EvaluateBids::entry(ContractNetInitiator* contractNetInitiator)
 // ----------------------------------------------------------------------------
 // State: StoreBids
 //
-void StoreBids::entry(ContractNetInitiator* contractNetInitiator){}
-void StoreBids::exit(ContractNetInitiator* contractNetInitiator){}
+void StoreBids::entry(ContractNetInitiator* contractNetInitiator){std::cout << "Entering StoreBids state ... " << "nResponders: " << contractNetInitiator->nResponders << " nAcceptances: " << contractNetInitiator->nAcceptances << std::endl;}
+void StoreBids::exit(ContractNetInitiator* contractNetInitiator){std::cout << "Exiting StoreBids state ... " << "nResponders: " << contractNetInitiator->nResponders << " nAcceptances: " << contractNetInitiator->nAcceptances << std::endl;}
 
 void StoreBids::react(ContractNetInitiator* contractNetInitiator, ACLMessage const & Message)
 {
@@ -110,8 +116,8 @@ void StoreBids::react(ContractNetInitiator* contractNetInitiator, ACLMessage con
 // ----------------------------------------------------------------------------
 // State: SendCfp
 //
-void SendCfp::entry(ContractNetInitiator* contractNetInitiator){}
-void SendCfp::exit(ContractNetInitiator* contractNetInitiator){}
+void SendCfp::entry(ContractNetInitiator* contractNetInitiator){std::cout << "Entering SendCfp state ... " << "nResponders: " << contractNetInitiator->nResponders << " nAcceptances: " << contractNetInitiator->nAcceptances << std::endl;}
+void SendCfp::exit(ContractNetInitiator* contractNetInitiator){std::cout << "Exiting SendCfp state ... " << "nResponders: " << contractNetInitiator->nResponders << " nAcceptances: " << contractNetInitiator->nAcceptances << std::endl;}
 void SendCfp::react(ContractNetInitiator* contractNetInitiator, ACLMessage const & Message)
 {
   if (Message.getPerformative() == "CFP") //TO-DO: && Message.getSender() == "this agent identifier" change it with this agent's ID parameter

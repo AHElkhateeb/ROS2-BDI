@@ -5,6 +5,7 @@
 #define ACL_COMMUNICATOR_NODE_NAME "acl_communicator"
 
 #define ACL_SRV "acl_srv"
+#define ACL_MSG_TOPIC "acl_msg"
 #define DEL_CONV_TOPIC "del_conv"
 
 #define ADD_I 1

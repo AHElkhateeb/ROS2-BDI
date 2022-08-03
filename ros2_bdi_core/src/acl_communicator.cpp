@@ -31,8 +31,6 @@ using ros2_bdi_interfaces::srv::AclSrv;
 using BDIManaged::ManagedBelief;
 using BDIManaged::ManagedDesire;
 
-int i = 0;
-
 
 ACLCommunicator::ACLCommunicator()
   : rclcpp::Node(ACL_COMMUNICATOR_NODE_NAME)
@@ -70,11 +68,17 @@ void ACLCommunicator::init()
 
   // to make the msg receivals callbacks run on different threads
   callback_group_msg_receivals_ = this->create_callback_group(rclcpp::callback_group::CallbackGroupType::Reentrant);
+  auto incoming_msg_opt = rclcpp::SubscriptionOptions();
+  incoming_msg_opt.callback_group = callback_group_msg_receivals_;
 
   // init server for handling msg requests from other agents
   messaging_server_ = this->create_service<AclSrv>(ACL_SRV, 
       bind(&ACLCommunicator::handleMsgReceived, this, _1, _2), rmw_qos_profile_services_default, callback_group_msg_receivals_);
   
+  // init server for handling incoming acl msgs from other agents
+  incoming_messages_sub_ = this->create_subscription<AclMsg>(ACL_MSG_TOPIC, qos_keep_all,
+      bind(&ACLCommunicator::handleIncomingMsg, this, _1), incoming_msg_opt);
+
   // to remove conversation clients from the conv_clients_ set and make callbacks run on same thread of execution wrt srv callbacks
   callback_group_del_conv_clients_ = this->create_callback_group(rclcpp::callback_group::CallbackGroupType::MutuallyExclusive);
   auto del_conv_clients_opt = rclcpp::SubscriptionOptions();
@@ -229,6 +233,29 @@ void ACLCommunicator::handleMsgReceived(const AclSrv::Request::SharedPtr request
 
   //replies to request with true for message being received
   response->received = true;
+}
+
+void ACLCommunicator::handleIncomingMsg(const ros2_bdi_interfaces::msg::AclMsg::SharedPtr msg)
+{
+  ACLMessage msg_received = ACLMessage(*msg);
+
+  conv_clients_upd_lock_.lock();
+  
+  if(conversations.find(msg_received.getConversationId()) == conversations.end()) //NotFound
+    {
+      //add to list of conversations and dispatch a new ConversationClient Node
+      conversations[ msg_received.getConversationId() ] = std::make_shared<ContractNetInitiator>(&desire_set_, &belief_set_);
+      conv_clients_upd_lock_.unlock();
+      RCLCPP_INFO(this->get_logger(), "ConvID: " + msg_received.getConversationId() + " added and will be dispatched");
+      conversations[ msg_received.getConversationId() ]->receiveMsg(msg_received);
+    }
+  else //Found
+    {
+      conv_clients_upd_lock_.unlock();
+      RCLCPP_INFO(this->get_logger(), "ConvID: " + msg_received.getConversationId() + " found and will be dispatched");
+      //dispatch to the found ConversationClient Node;
+      conversations[ msg_received.getConversationId() ]->receiveMsg(msg_received);
+    }
 }
 
 int main(int argc, char ** argv)
