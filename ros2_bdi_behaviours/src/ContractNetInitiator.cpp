@@ -3,7 +3,7 @@
 
 ContractNetInitiator::ContractNetInitiator(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set) : ConversationsClient(desire_set, belief_set)
 {
-	// All ContractNetInitiators are initially in ReceiveCfp state
+	// All ContractNetInitiators are initially in SendCfp state
 	currentState = &SendCfp::getInstance();
 }
 

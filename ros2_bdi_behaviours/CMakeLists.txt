@@ -13,8 +13,10 @@ find_package(ros2_bdi_utils REQUIRED)
 include_directories(include)
 
 set(BEHAVIOURS-SOURCES
-  src/ContractNetResponder.cpp  
+  src/ContractNetResponder.cpp
+  src/ContractNetInitiator.cpp  
   src/ConcreteContractNetResponderStates.cpp
+  src/ConcreteContractNetInitiatorStates.cpp
   src/ACLMessage.cpp
   src/conversations_client.cpp
   src/MessageTemplate.cpp

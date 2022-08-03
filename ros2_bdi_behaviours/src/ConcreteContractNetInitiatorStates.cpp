@@ -114,14 +114,18 @@ void SendCfp::react(ContractNetInitiator* contractNetInitiator, ACLMessage const
     {
       contractNetInitiator->cfp = Message;
       contractNetInitiator->nResponders = Message.getReceivers().size();
-      std::cout << "SendCfp state: CFP message to be sent to " << contractNetInitiator->nResponders << " agents" << std::endl;
-      //send(CFP)
-      contractNetInitiator->setState(StoreBids::getInstance());
+      if(contractNetInitiator->nResponders > 0)
+      {
+        std::cout << "SendCfp state: CFP message to be sent to " << contractNetInitiator->nResponders << " agents" << std::endl;
+        //send(CFP)
+        contractNetInitiator->setState(StoreBids::getInstance());
+      }
+      else
+        std::cout << "SendCfp state: CFP message has " << contractNetInitiator->nResponders << " receiver agents." << std::endl;
     }
   else
     {
       std::cout << "SendCfp state: Message passed to this behaviour should be CFP and AID == this agent's AID" << std::endl;
       //send a NOT-UNDERSTOOD msg to communicate communication problems.
     }
-
 }

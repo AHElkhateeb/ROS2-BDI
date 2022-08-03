@@ -26,7 +26,7 @@ public:
 	void receiveMsg(ACLMessage msg) override
   	{
 		inbox.push_back(msg);
-    	react(msg);
+    	this->react(msg);
   	}
 
 	void react(ACLMessage const & event);

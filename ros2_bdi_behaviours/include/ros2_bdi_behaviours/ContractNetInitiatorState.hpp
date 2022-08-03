@@ -3,7 +3,7 @@
 
 // Forward declaration to resolve circular dependency/include
 class ContractNetInitiator;
-struct ActionOver;
+class ACLMessage;
 
 class ContractNetInitiatorState
 {
