@@ -32,6 +32,8 @@ namespace ACLConversations{
             //del_conv publisher
             rclcpp::Publisher<std_msgs::msg::String>::SharedPtr del_conv_client_publisher_;
 
+            void deleteConvID();
+
         private:
             // node to be spinned while making request
             rclcpp::Node::SharedPtr node_;

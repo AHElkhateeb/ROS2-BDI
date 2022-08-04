@@ -113,3 +113,8 @@ int ConversationsClient::sendMsg(std::vector<ACLMessage> msgs)
     // returns the number of receivers the message has been successfully send to
     return sentMsgs;
 }
+
+void ConversationsClient::deleteConvID()
+{
+    this->del_conv_client_publisher_->publish(std_msgs::msg::String().set__data(this->ConversationId));
+}
