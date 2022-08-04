@@ -9,6 +9,7 @@
 #include "ros2_bdi_interfaces/msg/belief_set.hpp"
 #include "ros2_bdi_interfaces/msg/desire.hpp"
 #include "ros2_bdi_interfaces/msg/desire_set.hpp"
+#include "ros2_bdi_interfaces/msg/acl_msg.hpp"
 #include "ros2_bdi_interfaces/srv/upd_belief_set.hpp"
 #include "ros2_bdi_interfaces/srv/upd_desire_set.hpp"
 #include "ros2_bdi_interfaces/srv/acl_srv.hpp"

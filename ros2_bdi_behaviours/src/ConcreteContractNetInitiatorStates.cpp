@@ -12,8 +12,7 @@ void EndProtocol::entry(ContractNetInitiator* contractNetInitiator)
   std::cout << "Entering EndProtocol state ... " << "nResponders: " << contractNetInitiator->nResponders << " nAcceptances: " << contractNetInitiator->nAcceptances << std::endl;
 
   //deletes ConvID SharedPointer
-  auto convID = std_msgs::msg::String().set__data(contractNetInitiator->cfp.getConversationId());
-  contractNetInitiator->del_conv_client_publisher_->publish(convID);
+  contractNetInitiator->deleteConvID();
 }
 
 // ----------------------------------------------------------------------------
@@ -43,7 +42,7 @@ void WaitForResult::react(ContractNetInitiator* contractNetInitiator, ACLMessage
     contractNetInitiator->informs.push_back(Message);
     std::cout << "WaitForResult state: Out of sequence message received" << std::endl;
     contractNetInitiator->handleNotUnderstood(Message);
-    //send a NOT-UNDERSTOOD msg to communicate communication problems.
+    contractNetInitiator->sendMsg(Message.createReply()); //Sends back a NOTUNDERSTOOD Message
   }
 
   std::cout << "WaitForResult state: No. of informs is " << contractNetInitiator->informs.size() << " No. of acceptances is " << contractNetInitiator->nAcceptances << std::endl;
@@ -63,12 +62,12 @@ void EvaluateBids::entry(ContractNetInitiator* contractNetInitiator)
   std::cout << "Entering EvaluateBids state ... " << "nResponders: " << contractNetInitiator->nResponders << " nAcceptances: " << contractNetInitiator->nAcceptances << std::endl;
 
   contractNetInitiator->acceptances = contractNetInitiator->handleAllResponses(contractNetInitiator->responses);
-  //send(contractNetInitiator->acceptances)
+  contractNetInitiator->sendMsg(contractNetInitiator->acceptances);
   for(unsigned int i = 0; i < contractNetInitiator->acceptances.size(); i++)
   {
     if(contractNetInitiator->acceptances[i].getPerformative()=="ACCEPT")
       {
-        contractNetInitiator->nAcceptances++;
+        contractNetInitiator->nAcceptances += contractNetInitiator->acceptances[i].getReceivers().size(); //In one ACL Message there can be multiple receivers
       }
   }
   
@@ -106,7 +105,7 @@ void StoreBids::react(ContractNetInitiator* contractNetInitiator, ACLMessage con
     contractNetInitiator->responses.push_back(Message);
     std::cout << "StoreBids state: Out of sequence message received" << std::endl;
     contractNetInitiator->handleNotUnderstood(Message);
-    //send a NOT-UNDERSTOOD msg to communicate communication problems.
+    contractNetInitiator->sendMsg(Message.createReply()); //Sends back a NOTUNDERSTOOD Message
   }
 
   if(contractNetInitiator->responses.size() == contractNetInitiator->nResponders)
@@ -127,7 +126,7 @@ void SendCfp::react(ContractNetInitiator* contractNetInitiator, ACLMessage const
       if(contractNetInitiator->nResponders > 0)
       {
         std::cout << "SendCfp state: CFP message to be sent to " << contractNetInitiator->nResponders << " agents" << std::endl;
-        //send(CFP)
+        contractNetInitiator->sendMsg(contractNetInitiator->cfp);
         contractNetInitiator->setState(StoreBids::getInstance());
       }
       else
@@ -136,6 +135,5 @@ void SendCfp::react(ContractNetInitiator* contractNetInitiator, ACLMessage const
   else
     {
       std::cout << "SendCfp state: Message passed to this behaviour should be CFP and AID == this agent's AID" << std::endl;
-      //send a NOT-UNDERSTOOD msg to communicate communication problems.
     }
 }

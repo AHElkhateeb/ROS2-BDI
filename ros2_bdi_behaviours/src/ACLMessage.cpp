@@ -1,5 +1,7 @@
 #include"ros2_bdi_behaviours/ACLMessage.hpp"
 
+#define CURRENT_TIME_MILLIS std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
+
 using ros2_bdi_interfaces::msg::AclMsg;
 
 	ACLMessage::ACLMessage()
@@ -57,17 +59,9 @@ using ros2_bdi_interfaces::msg::AclMsg;
 		reply_to_.clear();
 	}
 
-	string ACLMessage::currentTimeMillis()  const //TO-DO should be moved somewhere else
-	{
-		auto time = std::chrono::system_clock::now();
-		auto since_epoch = time.time_since_epoch();
-		auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(since_epoch);
-		return std::to_string(millis.count());
-	}
-
 	ACLMessage 	ACLMessage::createReply() const
 	{
-		ACLMessage m = ACLMessage(performative_);
+		ACLMessage m = ACLMessage();
 		auto it_begin =reply_to_.begin();
 		auto it_end =reply_to_.end();
 		if(it_begin == it_end)
@@ -89,9 +83,9 @@ using ros2_bdi_interfaces::msg::AclMsg;
 		m.setConversationId(conversation_id_);
 		
 		if (sender_ != "")
-			m.setReplyWith(sender_ + currentTimeMillis()); 
+			m.setReplyWith(sender_ + CURRENT_TIME_MILLIS); 
 		else
-			m.setReplyWith("X" + currentTimeMillis());
+			m.setReplyWith("X" + CURRENT_TIME_MILLIS);
 
 		return m; 		
 	}

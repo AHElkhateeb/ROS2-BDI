@@ -38,7 +38,6 @@ public:
 	void addReplyTo(string reply_to);
 	void clearAllReceiver();
 	void clearAllReplyTo();
-	string currentTimeMillis() const; //TO-DO should be moved somewhere else
 	ACLMessage 	createReply() const;
 	string getContent() const;
 	string getConversationId() const;

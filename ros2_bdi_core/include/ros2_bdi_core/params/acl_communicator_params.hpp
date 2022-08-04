@@ -12,4 +12,6 @@
 #define DEL_I 0
 #define MAX_WAIT_UPD 4 // indicates number of belief/desire set notification to wait before considering a submitted upd request failed
 
+#define CURRENT_TIME_MILLIS std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
+
 #endif // ACL_COMMUNICATOR_PARAMS_H_

@@ -12,8 +12,7 @@ void EndProtocol::react(ContractNetResponder* contractNetResponder, ActionOver c
 void EndProtocol::entry(ContractNetResponder* contractNetResponder)
 {
 	//deletes ConvID SharedPointer
-  auto convID = std_msgs::msg::String().set__data(contractNetResponder->cfp.getConversationId());
-  contractNetResponder->del_conv_client_publisher_->publish(convID);
+  contractNetResponder->deleteConvID();
 }
 
 // ----------------------------------------------------------------------------
@@ -24,7 +23,7 @@ void PerformAction::exit(ContractNetResponder* contractNetResponder){}
 void PerformAction::entry(ContractNetResponder* contractNetResponder)
 {
   contractNetResponder->inform = contractNetResponder->handleAcceptProposal(contractNetResponder->cfp, contractNetResponder->propose, contractNetResponder->accept);
-	//send the output of the handleAcceptProposal function
+	contractNetResponder->sendMsg(contractNetResponder->inform);
   contractNetResponder->react(ActionOver());
 }
 
@@ -38,7 +37,7 @@ void PerformAction::react(ContractNetResponder* contractNetResponder, ACLMessage
     else
     {
       std::cout << "PerformAction state: Out of sequence message received" << std::endl;
-      //send a NOT-UNDERSTOOD msg to communicate communication problems.
+      contractNetResponder->sendMsg(Message.createReply()); //Sends back a NOTUNDERSTOOD Message
     }
 }
 
@@ -56,7 +55,7 @@ void CfpEvaluation::react(ContractNetResponder* contractNetResponder, ActionOver
 void CfpEvaluation::entry(ContractNetResponder* contractNetResponder)
 {
 	contractNetResponder->propose = contractNetResponder->handleCfp(contractNetResponder->cfp);
-	//send the output of the handleCfp function
+	contractNetResponder->sendMsg(contractNetResponder->propose);
 }
 
 void CfpEvaluation::react(ContractNetResponder* contractNetResponder, ACLMessage const & Message)
@@ -77,7 +76,7 @@ void CfpEvaluation::react(ContractNetResponder* contractNetResponder, ACLMessage
       else
       	{
           std::cout << "CfpEvaluation state: Out of sequence message received" << std::endl;
-          //send a NOT-UNDERSTOOD msg to communicate communication problems.
+          contractNetResponder->sendMsg(Message.createReply()); //Sends back a NOTUNDERSTOOD Message
         }
 }
 
@@ -104,6 +103,6 @@ void ReceiveCfp::react(ContractNetResponder* contractNetResponder, ACLMessage co
     else
       {
         std::cout << "ReceiveCfp state: Out of sequence message received" << std::endl;
-        //send a NOT-UNDERSTOOD msg to communicate communication problems.
+        contractNetResponder->sendMsg(Message.createReply()); //Sends back a NOTUNDERSTOOD Message
       }
 }

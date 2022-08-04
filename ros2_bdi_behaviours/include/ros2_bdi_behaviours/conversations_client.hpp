@@ -7,6 +7,7 @@
 
 #include "ros2_bdi_utils/ManagedBelief.hpp"
 #include "ros2_bdi_utils/ManagedDesire.hpp"
+#include "ros2_bdi_interfaces/msg/acl_msg.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
@@ -25,12 +26,16 @@ namespace ACLConversations{
 
             virtual void receiveMsg(ACLMessage msg);
 
+            int sendMsg(ACLMessage msg);
+            int sendMsg(std::vector<ACLMessage> msgs);
+
             //del_conv publisher
             rclcpp::Publisher<std_msgs::msg::String>::SharedPtr del_conv_client_publisher_;
 
         private:
             // node to be spinned while making request
             rclcpp::Node::SharedPtr node_;
+            string ConversationId;
             const std::set<BDIManaged::ManagedDesire>& desire_set_; 
             const std::set<BDIManaged::ManagedBelief>& belief_set_;
 

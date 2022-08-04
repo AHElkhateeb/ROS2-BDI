@@ -19,6 +19,7 @@
 #endif
 
 using std::string;
+using ros2_bdi_interfaces::msg::AclMsg;
 
 using ACLConversations::ConversationsClient;
 
@@ -50,4 +51,65 @@ void ConversationsClient::receiveMsg(ACLMessage msg)
     ACLMessage reply = msg.createReply();
     reply.setContent("Agree");
 
+}
+
+int ConversationsClient::sendMsg(ACLMessage msg)
+{
+    string topicName;
+    int sentMsgs=0;
+
+    //TO-DO: msg.setSender("AGENT_ID"); //This Agent's ID should be added here
+    msg.setConversationId(this->ConversationId); //The Conversation ID should be set here
+    auto ros2Msg = msg.getMessage();
+
+    for(int i = 0 ; i < msg.getReceivers().size() ; i++)
+    {
+        topicName = "/" + msg.getReceivers()[i] + "/" + ACL_MSG_TOPIC;
+        auto msg_publisher = node_->create_publisher<AclMsg>(topicName, 10);
+        if( msg_publisher->get_subscription_count() >= 0 )
+        {
+            msg_publisher->publish(ros2Msg);
+            sentMsgs++;
+        }
+    }
+    
+    // returns the number of receivers the message has been successfully sent to
+    return sentMsgs;
+}
+
+int ConversationsClient::sendMsg(std::vector<ACLMessage> msgs)
+{
+    string topicName;
+    int sentMsgs=0;
+
+    auto it_begin =msgs.begin();
+    auto it_end =msgs.end();
+    if(it_begin == it_end)
+    {
+        return 0; //The ACLMessage vector is empty
+    }
+    else
+    {
+        while(it_begin != it_end)
+        {
+            //(*it_begin).setSender(AGENT_ID); //The Agent's ID should be added here to sender field
+            (*it_begin).setConversationId(this->ConversationId); //The Conversation ID should be set here
+            auto ros2Msg = (*it_begin).getMessage();
+
+            for(int i = 0 ; i < (*it_begin).getReceivers().size() ; i++)
+            {
+                topicName = "/" + (*it_begin).getReceivers()[i] + "/" + ACL_MSG_TOPIC;
+                auto msg_publisher = node_->create_publisher<AclMsg>(topicName, 10);
+                if( msg_publisher->get_subscription_count() >= 0 )
+                {
+                    msg_publisher->publish(ros2Msg);
+                    sentMsgs++;
+                }
+            }
+            advance(it_begin, 1);
+        }
+    }
+
+    // returns the number of receivers the message has been successfully send to
+    return sentMsgs;
 }

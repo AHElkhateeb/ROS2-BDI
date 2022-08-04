@@ -217,6 +217,7 @@ void ACLCommunicator::handleMsgReceived(const AclSrv::Request::SharedPtr request
   
   if(conversations.find(msg_received.getConversationId()) == conversations.end()) //NotFound
     {
+      if(msg_received.getConversationId() == "") { msg_received.setConversationId( agent_id_+CURRENT_TIME_MILLIS ); }
       //add to list of conversations and dispatch a new ConversationClient Node
       conversations[ msg_received.getConversationId() ] = std::make_shared<ContractNetInitiator>(&desire_set_, &belief_set_);
       conv_clients_upd_lock_.unlock();
@@ -243,6 +244,7 @@ void ACLCommunicator::handleIncomingMsg(const ros2_bdi_interfaces::msg::AclMsg::
   
   if(conversations.find(msg_received.getConversationId()) == conversations.end()) //NotFound
     {
+      if(msg_received.getConversationId() == "") { msg_received.setConversationId( agent_id_+CURRENT_TIME_MILLIS ); }
       //add to list of conversations and dispatch a new ConversationClient Node
       conversations[ msg_received.getConversationId() ] = std::make_shared<ContractNetInitiator>(&desire_set_, &belief_set_);
       conv_clients_upd_lock_.unlock();
