@@ -72,9 +72,11 @@ void ACLCommunicator::init()
   incoming_msg_opt.callback_group = callback_group_msg_receivals_;
 
   // init server for handling msg requests from other agents
+  /*
   messaging_server_ = this->create_service<AclSrv>(ACL_SRV, 
       bind(&ACLCommunicator::handleMsgReceived, this, _1, _2), rmw_qos_profile_services_default, callback_group_msg_receivals_);
-  
+  */
+
   // init server for handling incoming acl msgs from other agents
   incoming_messages_sub_ = this->create_subscription<AclMsg>(ACL_MSG_TOPIC, qos_keep_all,
       bind(&ACLCommunicator::handleIncomingMsg, this, _1), incoming_msg_opt);
@@ -208,6 +210,7 @@ void ACLCommunicator::deleteConversationclients(const std_msgs::msg::String::Sha
 /*  
     ACL message service handler        
 */
+/*
 void ACLCommunicator::handleMsgReceived(const AclSrv::Request::SharedPtr request,
     const AclSrv::Response::SharedPtr response)
 {
@@ -235,6 +238,9 @@ void ACLCommunicator::handleMsgReceived(const AclSrv::Request::SharedPtr request
   //replies to request with true for message being received
   response->received = true;
 }
+*/
+
+/*    ACL message handler    */
 
 void ACLCommunicator::handleIncomingMsg(const ros2_bdi_interfaces::msg::AclMsg::SharedPtr msg)
 {
@@ -245,9 +251,28 @@ void ACLCommunicator::handleIncomingMsg(const ros2_bdi_interfaces::msg::AclMsg::
   if(conversations.find(msg_received.getConversationId()) == conversations.end()) //NotFound
     {
       if(msg_received.getConversationId() == "") { msg_received.setConversationId( agent_id_+CURRENT_TIME_MILLIS ); }
+
       //add to list of conversations and dispatch a new ConversationClient Node
-      conversations[ msg_received.getConversationId() ] = std::make_shared<ContractNetInitiator>(&desire_set_, &belief_set_);
-      conv_clients_upd_lock_.unlock();
+      MessageTemplate msg_cnet_init, msg_cnet_respond;
+      msg_cnet_init.matchProtocol(AclMsg::FIPA_CONTRACT_NET).matchSender(agent_id_);
+      msg_cnet_respond.matchProtocol(AclMsg::FIPA_CONTRACT_NET);
+
+      if(msg_cnet_init.isMatch(msg_received))
+      {
+        conversations[ msg_received.getConversationId() ] = std::make_shared<ContractNetInitiator>(&desire_set_, &belief_set_, agent_id_);
+        conv_clients_upd_lock_.unlock();
+      }
+      else if (msg_cnet_respond.isMatch(msg_received))
+      {
+        conversations[ msg_received.getConversationId() ] = std::make_shared<ContractNetResponder>(&desire_set_, &belief_set_, agent_id_);
+        conv_clients_upd_lock_.unlock();
+      }
+      else
+      {
+        conversations[ msg_received.getConversationId() ] = std::make_shared<ConversationsClient>(&desire_set_, &belief_set_, agent_id_);
+        conv_clients_upd_lock_.unlock();
+      }
+      
       RCLCPP_INFO(this->get_logger(), "ConvID: " + msg_received.getConversationId() + " added and will be dispatched");
       conversations[ msg_received.getConversationId() ]->receiveMsg(msg_received);
     }

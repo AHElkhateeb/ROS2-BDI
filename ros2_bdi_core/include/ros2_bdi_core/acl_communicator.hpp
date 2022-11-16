@@ -28,6 +28,7 @@
 #include "ros2_bdi_behaviours/ContractNetInitiator.hpp"
 
 #include "ros2_bdi_behaviours/ACLMessage.hpp"
+#include "ros2_bdi_behaviours/MessageTemplate.hpp"
 
 class ACLCommunicator : public rclcpp::Node
 {
