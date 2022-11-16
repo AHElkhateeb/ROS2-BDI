@@ -10,6 +10,7 @@
 #define BELIEF_MANAGER_NODE_NAME "belief_manager"
 #define EVENT_LISTENER_NODE_NAME "event_listener"
 #define MA_REQUEST_HANDLER_NODE_NAME "ma_request_handler"
+#define ACL_COMMUNICATOR_NODE_NAME "acl_communicator"
 #define PLAN_DIRECTOR_NODE_NAME "plan_director"
 #define PSYS_MONITOR_NODE_NAME "plansys_monitor"
 #define SCHEDULER_NODE_NAME "scheduler"
