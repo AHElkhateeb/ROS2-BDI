@@ -22,7 +22,7 @@ namespace ACLConversations{
     class ConversationsClient
     {
         public:
-            ConversationsClient(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set);
+            ConversationsClient(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id);
 
             virtual void receiveMsg(ACLMessage msg);
 
@@ -37,7 +37,8 @@ namespace ACLConversations{
         private:
             // node to be spinned while making request
             rclcpp::Node::SharedPtr node_;
-            string ConversationId;
+            string ConversationId_;
+            string AgentID_;
             const std::set<BDIManaged::ManagedDesire>& desire_set_; 
             const std::set<BDIManaged::ManagedBelief>& belief_set_;
 

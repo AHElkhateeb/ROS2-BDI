@@ -3,7 +3,7 @@
 
 using namespace ResponderStates;
 
-ContractNetResponder::ContractNetResponder(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set) : ConversationsClient(desire_set, belief_set)
+ContractNetResponder::ContractNetResponder(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id) : ConversationsClient(desire_set, belief_set, agent_id)
 {
 	// All ContractNetResponders are initially in ReceiveCfp state
 	currentState = &ReceiveCfp::getInstance();

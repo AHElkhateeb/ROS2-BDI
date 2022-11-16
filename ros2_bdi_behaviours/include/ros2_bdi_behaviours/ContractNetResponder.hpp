@@ -19,7 +19,7 @@ struct ActionOver{};
 class ContractNetResponder : public ConversationsClient
 {
 public:
-	ContractNetResponder(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set);
+	ContractNetResponder(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id);
 	inline ContractNetResponderState* getCurrentState() const { return currentState; }
 	void setState(ContractNetResponderState& newState);
 
@@ -33,7 +33,7 @@ public:
 	void react(ActionOver const & event);
 
 	virtual ACLMessage handleCfp(ACLMessage cfp) { return ACLMessage();};
-	virtual ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose,ACLMessage accept) { return ACLMessage();};
+	virtual ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) { return ACLMessage();};
 	virtual void handleRejectProposal(ACLMessage cfp, ACLMessage propose, ACLMessage reject) { };
 
 	ACLMessage cfp, propose, accept, inform, reject;

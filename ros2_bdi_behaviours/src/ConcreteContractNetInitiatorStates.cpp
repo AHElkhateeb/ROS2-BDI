@@ -62,7 +62,6 @@ void EvaluateBids::entry(ContractNetInitiator* contractNetInitiator)
   std::cout << "Entering EvaluateBids state ... " << "nResponders: " << contractNetInitiator->nResponders << " nAcceptances: " << contractNetInitiator->nAcceptances << std::endl;
 
   contractNetInitiator->acceptances = contractNetInitiator->handleAllResponses(contractNetInitiator->responses);
-  contractNetInitiator->sendMsg(contractNetInitiator->acceptances);
   for(unsigned int i = 0; i < contractNetInitiator->acceptances.size(); i++)
   {
     if(contractNetInitiator->acceptances[i].getPerformative()=="ACCEPT")
@@ -70,6 +69,8 @@ void EvaluateBids::entry(ContractNetInitiator* contractNetInitiator)
         contractNetInitiator->nAcceptances += contractNetInitiator->acceptances[i].getReceivers().size(); //In one ACL Message there can be multiple receivers
       }
   }
+
+  contractNetInitiator->sendMsg(contractNetInitiator->acceptances);
   
   if(contractNetInitiator->nAcceptances > 0)
   {

@@ -3,7 +3,7 @@
 
 using namespace InitiatorStates;
 
-ContractNetInitiator::ContractNetInitiator(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set) : ConversationsClient(desire_set, belief_set), nAcceptances(0), nResponders(0)
+ContractNetInitiator::ContractNetInitiator(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id) : ConversationsClient(desire_set, belief_set, agent_id), nAcceptances(0), nResponders(0)
 {
 	// All ContractNetInitiators are initially in SendCfp state
 	currentState = &SendCfp::getInstance();

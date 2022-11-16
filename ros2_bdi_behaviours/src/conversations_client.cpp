@@ -28,7 +28,7 @@ using ACLConversations::ConversationsClient;
 //sendMessage() and other one in actions with different behaviour
 //Check that the message to be sent as an output of the handler functions follows the protocol message performatives
 
-ConversationsClient::ConversationsClient(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set) : desire_set_{*desire_set} , belief_set_{*belief_set}
+ConversationsClient::ConversationsClient(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id) : desire_set_{*desire_set} , belief_set_{*belief_set} , AgentID_{agent_id}
 {
     // node to perform async request to communication services of queried agent(s)
     // make the node spin just while waiting response or until timeout is reached
@@ -40,17 +40,7 @@ ConversationsClient::ConversationsClient(std::set<BDIManaged::ManagedDesire>* de
 
 void ConversationsClient::receiveMsg(ACLMessage msg)
 {
-    RCLCPP_INFO(node_->get_logger(), "Before 10 second sleep, ConvID: " + msg.getConversationId());
-    int x= (*belief_set_.begin()).pddlType();
-    RCLCPP_INFO(node_->get_logger(), "   pddlType: " + std::to_string(x));
-    sleep(10);
-    RCLCPP_INFO(node_->get_logger(), "After 10 second sleep, ConvID: " + msg.getConversationId());
-    x= (*(belief_set_.begin())).pddlType();
-    RCLCPP_INFO(node_->get_logger(), "   pddlType: " + std::to_string(x));
-    
-    ACLMessage reply = msg.createReply();
-    reply.setContent("Agree");
-
+    RCLCPP_INFO(node_->get_logger(), AgentID_ + " received a message with convID: " + msg.getConversationId() + " and will take no action");
 }
 
 int ConversationsClient::sendMsg(ACLMessage msg)
@@ -59,14 +49,15 @@ int ConversationsClient::sendMsg(ACLMessage msg)
     int sentMsgs=0;
 
     //TO-DO: msg.setSender("AGENT_ID"); //This Agent's ID should be added here
-    msg.setConversationId(this->ConversationId); //The Conversation ID should be set here
+    msg.setConversationId(this->ConversationId_); //The Conversation ID should be set here
+    msg.setSender(this->AgentID_);
     auto ros2Msg = msg.getMessage();
 
     for(int i = 0 ; i < msg.getReceivers().size() ; i++)
     {
         topicName = "/" + msg.getReceivers()[i] + "/" + ACL_MSG_TOPIC;
         auto msg_publisher = node_->create_publisher<AclMsg>(topicName, 10);
-        if( msg_publisher->get_subscription_count() >= 0 )
+        if( msg_publisher->get_subscription_count() > 0 )
         {
             msg_publisher->publish(ros2Msg);
             sentMsgs++;
@@ -93,14 +84,15 @@ int ConversationsClient::sendMsg(std::vector<ACLMessage> msgs)
         while(it_begin != it_end)
         {
             //(*it_begin).setSender(AGENT_ID); //The Agent's ID should be added here to sender field
-            (*it_begin).setConversationId(this->ConversationId); //The Conversation ID should be set here
+            (*it_begin).setConversationId(this->ConversationId_); //The Conversation ID should be set here
+            (*it_begin).setSender(this->AgentID_);
             auto ros2Msg = (*it_begin).getMessage();
 
             for(int i = 0 ; i < (*it_begin).getReceivers().size() ; i++)
             {
                 topicName = "/" + (*it_begin).getReceivers()[i] + "/" + ACL_MSG_TOPIC;
                 auto msg_publisher = node_->create_publisher<AclMsg>(topicName, 10);
-                if( msg_publisher->get_subscription_count() >= 0 )
+                if( msg_publisher->get_subscription_count() > 0 )
                 {
                     msg_publisher->publish(ros2Msg);
                     sentMsgs++;
@@ -116,5 +108,5 @@ int ConversationsClient::sendMsg(std::vector<ACLMessage> msgs)
 
 void ConversationsClient::deleteConvID()
 {
-    this->del_conv_client_publisher_->publish(std_msgs::msg::String().set__data(this->ConversationId));
+    this->del_conv_client_publisher_->publish(std_msgs::msg::String().set__data(this->ConversationId_));
 }
