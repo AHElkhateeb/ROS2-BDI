@@ -28,7 +28,7 @@ using ACLConversations::ConversationsClient;
 //sendMessage() and other one in actions with different behaviour
 //Check that the message to be sent as an output of the handler functions follows the protocol message performatives
 
-ConversationsClient::ConversationsClient(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id) : desire_set_{*desire_set} , belief_set_{*belief_set} , AgentID_{agent_id}
+ConversationsClient::ConversationsClient(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id) : desire_set_{*desire_set} , belief_set_{*belief_set} , agent_id_{agent_id}
 {
     // node to perform async request to communication services of queried agent(s)
     // make the node spin just while waiting response or until timeout is reached
@@ -40,7 +40,7 @@ ConversationsClient::ConversationsClient(std::set<BDIManaged::ManagedDesire>* de
 
 void ConversationsClient::receiveMsg(ACLMessage msg)
 {
-    RCLCPP_INFO(node_->get_logger(), AgentID_ + " received a message with convID: " + msg.getConversationId() + " and will take no action");
+    RCLCPP_INFO(node_->get_logger(), agent_id_ + " received a message with convID: " + msg.getConversationId() + " and will take no action");
 }
 
 int ConversationsClient::sendMsg(ACLMessage msg)
@@ -50,7 +50,7 @@ int ConversationsClient::sendMsg(ACLMessage msg)
 
     //TO-DO: msg.setSender("AGENT_ID"); //This Agent's ID should be added here
     msg.setConversationId(this->ConversationId_); //The Conversation ID should be set here
-    msg.setSender(this->AgentID_);
+    msg.setSender(this->agent_id_);
     auto ros2Msg = msg.getMessage();
 
     for(int i = 0 ; i < msg.getReceivers().size() ; i++)
@@ -85,7 +85,7 @@ int ConversationsClient::sendMsg(std::vector<ACLMessage> msgs)
         {
             //(*it_begin).setSender(AGENT_ID); //The Agent's ID should be added here to sender field
             (*it_begin).setConversationId(this->ConversationId_); //The Conversation ID should be set here
-            (*it_begin).setSender(this->AgentID_);
+            (*it_begin).setSender(this->agent_id_);
             auto ros2Msg = (*it_begin).getMessage();
 
             for(int i = 0 ; i < (*it_begin).getReceivers().size() ; i++)

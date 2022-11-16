@@ -38,7 +38,7 @@ namespace ACLConversations{
             // node to be spinned while making request
             rclcpp::Node::SharedPtr node_;
             string ConversationId_;
-            string AgentID_;
+            string agent_id_;
             const std::set<BDIManaged::ManagedDesire>& desire_set_; 
             const std::set<BDIManaged::ManagedBelief>& belief_set_;
 
