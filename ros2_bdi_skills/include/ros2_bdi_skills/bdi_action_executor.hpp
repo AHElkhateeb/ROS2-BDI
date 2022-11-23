@@ -31,7 +31,7 @@
 #include "ros2_bdi_skills/communications_structs.hpp"
 #include "ros2_bdi_skills/communications_client.hpp"
 
-#include"ros2_bdi_behaviours/ACLMessage.hpp"
+#include "ros2_bdi_behaviours/ACLMessage.hpp"
 
 // Inner logic + ROS PARAMS & FIXED GLOBAL VALUES for ROS2 core nodes
 #include "ros2_bdi_core/params/core_common_params.hpp"

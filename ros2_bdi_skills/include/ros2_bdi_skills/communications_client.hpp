@@ -12,6 +12,8 @@
 #include "ros2_bdi_interfaces/srv/check_desire.hpp"
 #include "ros2_bdi_interfaces/srv/upd_desire_set.hpp"
 
+#include "ros2_bdi_interfaces/msg/acl_msg.hpp"
+
 #include "rclcpp/rclcpp.hpp"
 
 #include "ros2_bdi_skills/communications_structs.hpp"
@@ -69,6 +71,11 @@ namespace BDICommunications{
             */
             BDICommunications::UpdDesireResult updDesireRequest(const std::string& agent_ref, 
                     const std::string& agent_group, const ros2_bdi_interfaces::msg::Desire& desire, const UpdOperation& op);
+
+            /*
+                Helper method to publish the ACL message
+            */
+            bool publishMsg(ros2_bdi_interfaces::msg::AclMsg msg, std::string topic);
 
         private:
             // node to be spinned while making request

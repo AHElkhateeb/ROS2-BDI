@@ -18,6 +18,8 @@ using ros2_bdi_interfaces::srv::UpdBeliefSet;
 using ros2_bdi_interfaces::srv::CheckDesire;  
 using ros2_bdi_interfaces::srv::UpdDesireSet; 
 
+using ros2_bdi_interfaces::msg::AclMsg;
+
 using BDICommunications::CommunicationsClient;
 using BDICommunications::UpdOperation;
 using BDICommunications::CheckBeliefResult;
@@ -217,3 +219,20 @@ UpdDesireResult CommunicationsClient::updDesireRequest(const string& agent_ref, 
 
     return res;
 }
+
+/*
+    Helper method to publish the ACL message
+*/
+    bool CommunicationsClient::publishMsg(AclMsg msg, std::string topic)
+    {
+        auto msg_publisher = node_->create_publisher<AclMsg>(topic, 10);
+        if( msg_publisher->get_subscription_count() > 0 )
+        {
+            msg_publisher->publish(msg);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }

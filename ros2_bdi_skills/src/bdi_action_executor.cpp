@@ -261,25 +261,25 @@ UpdDesireResult BDIActionExecutor::sendUpdDesireRequest(const string& agent_ref,
 */
 bool BDIActionExecutor::sendMsg(ACLMessage msg)
 {
-    std::string topicName = "/" + this->agent_id_ + "/" + ACL_MSG_TOPIC;
+    std::string topicName = "/" + agent_id_ + "/" + ACL_MSG_TOPIC;
 
-    msg.setSender(this->agent_id_);
+    msg.setSender(agent_id_);
     auto ros2Msg = msg.getMessage();
 
-    auto msg_publisher = node_->create_publisher<AclMsg>(topicName, 10);
-    if( msg_publisher->get_subscription_count() > 0 )
+    if( comm_client_->publishMsg(ros2Msg, topicName) )
     {
-        msg_publisher->publish(ros2Msg);
-        return true;
+      return true;
     }
-
-    //returns false if the ACL_communicator node is not running correctly.
-    return false;
+    else
+    {
+      //returns false if the ACL_communicator node is not running correctly.
+      return false;
+    }
 }
 
 bool BDIActionExecutor::sendMsg(std::vector<ACLMessage> msgs)
 {
-  std::string topicName = "/" + this->agent_id_ + "/" + ACL_MSG_TOPIC;
+  std::string topicName = "/" + agent_id_ + "/" + ACL_MSG_TOPIC;
 
   auto it_begin =msgs.begin();
   auto it_end =msgs.end();
@@ -292,15 +292,10 @@ bool BDIActionExecutor::sendMsg(std::vector<ACLMessage> msgs)
   {
       while(it_begin != it_end)
       {
-          (*it_begin).setSender(this->agent_id_);
+          (*it_begin).setSender(agent_id_);
           auto ros2Msg = (*it_begin).getMessage();
 
-          auto msg_publisher = node_->create_publisher<AclMsg>(topicName, 10);
-          if( msg_publisher->get_subscription_count() > 0 )
-          {
-              msg_publisher->publish(ros2Msg);
-          }
-          else
+          if( !( comm_client_->publishMsg(ros2Msg, topicName) ) )
           {
             return false; //returns false if the ACL_communicator node is not running correctly.
           }
