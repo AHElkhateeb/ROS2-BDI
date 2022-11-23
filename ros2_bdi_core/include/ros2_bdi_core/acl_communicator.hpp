@@ -33,6 +33,7 @@
 #include "ros2_bdi_behaviours/conversations_client.hpp"
 #include "ros2_bdi_behaviours/ContractNetResponder.hpp"
 #include "ros2_bdi_behaviours/ContractNetInitiator.hpp"
+#include "ros2_bdi_behaviours/OutgoingMessage.hpp"
 
 #include "ros2_bdi_behaviours/ACLMessage.hpp"
 #include "ros2_bdi_behaviours/MessageTemplate.hpp"

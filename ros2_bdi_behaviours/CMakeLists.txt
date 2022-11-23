@@ -20,6 +20,8 @@ set(BEHAVIOURS-SOURCES
   src/ACLMessage.cpp
   src/conversations_client.cpp
   src/MessageTemplate.cpp
+  src/ConcreteOutgoingMessageStates.cpp
+  src/OutgoingMessage.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${BEHAVIOURS-SOURCES})

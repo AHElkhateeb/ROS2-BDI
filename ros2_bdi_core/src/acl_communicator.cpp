@@ -619,7 +619,9 @@ void ACLCommunicator::handleIncomingMsg(const ros2_bdi_interfaces::msg::AclMsg::
       if(msg_received.getConversationId() == "") { msg_received.setConversationId( agent_id_+CURRENT_TIME_MILLIS ); }
 
       //add to list of conversations and dispatch a new ConversationClient Node
-      MessageTemplate msg_cnet_init, msg_cnet_respond;
+      MessageTemplate msg_outgoing, msg_cnet_init, msg_cnet_respond;
+      
+      msg_outgoing.matchSender(agent_id_);
       msg_cnet_init.matchProtocol(AclMsg::FIPA_CONTRACT_NET).matchSender(agent_id_);
       msg_cnet_respond.matchProtocol(AclMsg::FIPA_CONTRACT_NET);
 
@@ -631,6 +633,11 @@ void ACLCommunicator::handleIncomingMsg(const ros2_bdi_interfaces::msg::AclMsg::
       else if (msg_cnet_respond.isMatch(msg_received))
       {
         conversations[ msg_received.getConversationId() ] = std::make_shared<ContractNetResponder>(&desire_set_, &belief_set_, agent_id_);
+        conv_clients_upd_lock_.unlock();
+      }
+      else if (msg_outgoing.isMatch(msg_received))
+      {
+        conversations[ msg_received.getConversationId() ] = std::make_shared<OutgoingMessage>(&desire_set_, &belief_set_, agent_id_);
         conv_clients_upd_lock_.unlock();
       }
       else
