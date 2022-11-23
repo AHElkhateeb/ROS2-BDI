@@ -22,6 +22,8 @@
 #include "ros2_bdi_interfaces/srv/check_desire.hpp"
 #include "ros2_bdi_interfaces/srv/upd_desire_set.hpp"
 
+#include "ros2_bdi_interfaces/msg/acl_msg.hpp"
+
 #include "ros2_bdi_utils/ManagedBelief.hpp"
 #include "ros2_bdi_utils/ManagedDesire.hpp"
 #include "ros2_bdi_utils/BDIFilter.hpp"
@@ -29,8 +31,11 @@
 #include "ros2_bdi_skills/communications_structs.hpp"
 #include "ros2_bdi_skills/communications_client.hpp"
 
+#include"ros2_bdi_behaviours/ACLMessage.hpp"
+
 // Inner logic + ROS PARAMS & FIXED GLOBAL VALUES for ROS2 core nodes
 #include "ros2_bdi_core/params/core_common_params.hpp"
+#include "ros2_bdi_core/params/acl_communicator_params.hpp"
 
 // #include "javaff_interfaces/msg/action_execution_status.hpp"
 // #include "javaff_interfaces/msg/execution_status.hpp"
@@ -124,6 +129,12 @@ protected:
         const ros2_bdi_interfaces::msg::Desire& desire);
     BDICommunications::UpdDesireResult sendUpdDesireRequest(const std::string& agent_ref, 
         const ros2_bdi_interfaces::msg::Desire& desire, const BDICommunications::UpdOperation& op, const bool& monitor_fulfill);
+
+    /*
+      Utility method to send an ACL message to other agents within the action doWork method implementation
+    */
+    bool sendMsg(ACLMessage msg);
+    bool sendMsg(std::vector<ACLMessage> msgs);
 
     /*
       if no monitored desire, just return false

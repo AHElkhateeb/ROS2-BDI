@@ -31,6 +31,8 @@ using ros2_bdi_interfaces::srv::UpdBeliefSet;
 using ros2_bdi_interfaces::srv::CheckDesire;  
 using ros2_bdi_interfaces::srv::UpdDesireSet;  
 
+using ros2_bdi_interfaces::msg::AclMsg;
+
 // using javaff_interfaces::msg::ActionExecutionStatus;
 // using javaff_interfaces::msg::ExecutionStatus;
 
@@ -252,6 +254,62 @@ UpdDesireResult BDIActionExecutor::sendUpdDesireRequest(const string& agent_ref,
   if(res.accepted && res.performed && monitor_fulfill)
     monitor(agent_ref, desire);
   return res;
+}
+
+/*
+  Utility method to send an ACL message to other agents within the action doWork method implementation
+*/
+bool BDIActionExecutor::sendMsg(ACLMessage msg)
+{
+    std::string topicName = "/" + this->agent_id_ + "/" + ACL_MSG_TOPIC;
+
+    msg.setSender(this->agent_id_);
+    auto ros2Msg = msg.getMessage();
+
+    auto msg_publisher = node_->create_publisher<AclMsg>(topicName, 10);
+    if( msg_publisher->get_subscription_count() > 0 )
+    {
+        msg_publisher->publish(ros2Msg);
+        return true;
+    }
+
+    //returns false if the ACL_communicator node is not running correctly.
+    return false;
+}
+
+bool BDIActionExecutor::sendMsg(std::vector<ACLMessage> msgs)
+{
+  std::string topicName = "/" + this->agent_id_ + "/" + ACL_MSG_TOPIC;
+
+  auto it_begin =msgs.begin();
+  auto it_end =msgs.end();
+  
+  if(it_begin == it_end)
+  {
+      return false; //The ACLMessage vector is empty
+  }
+  else
+  {
+      while(it_begin != it_end)
+      {
+          (*it_begin).setSender(this->agent_id_);
+          auto ros2Msg = (*it_begin).getMessage();
+
+          auto msg_publisher = node_->create_publisher<AclMsg>(topicName, 10);
+          if( msg_publisher->get_subscription_count() > 0 )
+          {
+              msg_publisher->publish(ros2Msg);
+          }
+          else
+          {
+            return false; //returns false if the ACL_communicator node is not running correctly.
+          }
+
+          advance(it_begin, 1);
+      }
+  }
+
+  return true;
 }
 
 /*
