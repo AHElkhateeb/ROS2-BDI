@@ -32,7 +32,7 @@ ConversationsClient::ConversationsClient(std::set<BDIManaged::ManagedDesire>* de
 {
     // node to perform async request to communication services of queried agent(s)
     // make the node spin just while waiting response or until timeout is reached
-    node_ = rclcpp::Node::make_shared("conversations_client");
+    node_ = rclcpp::Node::make_shared("conversations_client"+agent_id_+"_"+ConversationId_);
     RCLCPP_INFO(node_->get_logger(), "ConvID not found, Node Created");
 
     del_conv_client_publisher_ = node_->create_publisher<std_msgs::msg::String>(DEL_CONV_TOPIC, 10);
