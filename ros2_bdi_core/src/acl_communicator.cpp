@@ -627,7 +627,7 @@ void ACLCommunicator::handleIncomingMsg(const ros2_bdi_interfaces::msg::AclMsg::
 
       if(msg_cnet_init.isMatch(msg_received))
       {
-        conversations[ msg_received.getConversationId() ] = std::make_shared<ContractNetInitiator>(&desire_set_, &belief_set_, agent_id_);
+        conversations[ msg_received.getConversationId() ] = std::make_shared<OrganizerBehaviour>(&desire_set_, &belief_set_, agent_id_);
         conv_clients_upd_lock_.unlock();
       }
       else if (msg_cnet_respond.isMatch(msg_received))
