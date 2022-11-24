@@ -27,12 +27,12 @@ void WaitForResult::entry(ContractNetInitiator* contractNetInitiator)
 
 void WaitForResult::react(ContractNetInitiator* contractNetInitiator, ACLMessage const & Message)
 {
-  if(Message.getPerformative()=="inform")
+  if(Message.getPerformative()==AclMsg::INFORM)
   {
     contractNetInitiator->informs.push_back(Message);
     contractNetInitiator->handleInform(Message);
   }
-  else if(Message.getPerformative()=="failure")
+  else if(Message.getPerformative()==AclMsg::FAILURE)
   {
     contractNetInitiator->informs.push_back(Message);
     contractNetInitiator->handleFailure(Message);
@@ -64,7 +64,7 @@ void EvaluateBids::entry(ContractNetInitiator* contractNetInitiator)
   contractNetInitiator->acceptances = contractNetInitiator->handleAllResponses(contractNetInitiator->responses);
   for(unsigned int i = 0; i < contractNetInitiator->acceptances.size(); i++)
   {
-    if(contractNetInitiator->acceptances[i].getPerformative()=="accept-proposal")
+    if(contractNetInitiator->acceptances[i].getPerformative()==AclMsg::ACCEPT_PROPOSAL)
       {
         contractNetInitiator->nAcceptances += contractNetInitiator->acceptances[i].getReceivers().size(); //In one ACL Message there can be multiple receivers
       }
@@ -91,12 +91,12 @@ void StoreBids::exit(ContractNetInitiator* contractNetInitiator){std::cout << "E
 
 void StoreBids::react(ContractNetInitiator* contractNetInitiator, ACLMessage const & Message)
 {
-  if(Message.getPerformative()=="propose")
+  if(Message.getPerformative()==AclMsg::PROPOSE)
   {
     contractNetInitiator->responses.push_back(Message);
     contractNetInitiator->handlePropose(Message);
   }
-  else if(Message.getPerformative()=="reject-proposal")
+  else if(Message.getPerformative()==AclMsg::REJECT_PROPOSAL)
   {
     contractNetInitiator->responses.push_back(Message);
     contractNetInitiator->handleReject(Message);
@@ -120,7 +120,7 @@ void SendCfp::entry(ContractNetInitiator* contractNetInitiator){std::cout << "En
 void SendCfp::exit(ContractNetInitiator* contractNetInitiator){std::cout << "Exiting SendCfp state ... " << "nResponders: " << contractNetInitiator->nResponders << " nAcceptances: " << contractNetInitiator->nAcceptances << std::endl;}
 void SendCfp::react(ContractNetInitiator* contractNetInitiator, ACLMessage const & Message)
 {
-  if (Message.getPerformative() == "cfp") //TO-DO: && Message.getSender() == "this agent identifier" change it with this agent's ID parameter
+  if (Message.getPerformative() == AclMsg::CALL_FOR_PROPOSAL) //TO-DO: && Message.getSender() == "this agent identifier" change it with this agent's ID parameter
     {
       contractNetInitiator->cfp = Message;
       contractNetInitiator->nResponders = Message.getReceivers().size();
