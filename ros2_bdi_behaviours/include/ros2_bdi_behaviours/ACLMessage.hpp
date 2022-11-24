@@ -12,6 +12,7 @@
 using std::string;
 using std::vector;
 using std::iterator;
+using ros2_bdi_interfaces::msg::AclMsg;
 
 class ACLMessage
 {
@@ -33,7 +34,7 @@ private:
 public:
 	ACLMessage();
 	ACLMessage(string performative);
-	ACLMessage(ros2_bdi_interfaces::msg::AclMsg msg);
+	ACLMessage(AclMsg msg);
 	void addReceiver(string receiver);
 	void addReplyTo(string reply_to);
 	void clearAllReceiver();
@@ -44,7 +45,7 @@ public:
 	string getEncoding() const;
 	string getInReplyTo() const;
 	string getLanguage() const;
-	ros2_bdi_interfaces::msg::AclMsg getMessage() const;
+	AclMsg getMessage() const;
 	string getOntology() const;
 	string getPerformative() const;
 	string getProtocol() const;
