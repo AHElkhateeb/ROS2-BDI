@@ -34,7 +34,7 @@ namespace ACLConversations{
 
             void deleteConvID();
 
-        private:
+        protected:
             // node to be spinned while making request
             rclcpp::Node::SharedPtr node_;
             string ConversationId_;

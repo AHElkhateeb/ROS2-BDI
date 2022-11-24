@@ -127,7 +127,7 @@ void SendCfp::react(ContractNetInitiator* contractNetInitiator, ACLMessage const
       if(contractNetInitiator->nResponders > 0)
       {
         std::cout << "SendCfp state: CFP message to be sent to " << contractNetInitiator->nResponders << " agents" << std::endl;
-        contractNetInitiator->sendMsg(contractNetInitiator->cfp);
+        contractNetInitiator->nResponders = contractNetInitiator->sendMsg(contractNetInitiator->cfp);
         contractNetInitiator->setState(StoreBids::getInstance());
       }
       else
