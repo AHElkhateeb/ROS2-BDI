@@ -38,6 +38,7 @@ void PerformAction::react(ContractNetResponder* contractNetResponder, ACLMessage
     {
       std::cout << "PerformAction state: Out of sequence message received" << std::endl;
       contractNetResponder->sendMsg(Message.createReply()); //Sends back a NOTUNDERSTOOD Message
+      contractNetResponder->setState(EndProtocol::getInstance());
     }
 }
 
@@ -74,10 +75,11 @@ void CfpEvaluation::react(ContractNetResponder* contractNetResponder, ACLMessage
         contractNetResponder->setState(EndProtocol::getInstance());
       }
       else
-      	{
-          std::cout << "CfpEvaluation state: Out of sequence message received" << std::endl;
-          contractNetResponder->sendMsg(Message.createReply()); //Sends back a NOTUNDERSTOOD Message
-        }
+      {
+        std::cout << "CfpEvaluation state: Out of sequence message received" << std::endl;
+        contractNetResponder->sendMsg(Message.createReply()); //Sends back a NOTUNDERSTOOD Message
+        contractNetResponder->setState(EndProtocol::getInstance());
+      }
 }
 
 
@@ -104,5 +106,6 @@ void ReceiveCfp::react(ContractNetResponder* contractNetResponder, ACLMessage co
       {
         std::cout << "ReceiveCfp state: Out of sequence message received" << std::endl;
         contractNetResponder->sendMsg(Message.createReply()); //Sends back a NOTUNDERSTOOD Message
+        contractNetResponder->setState(EndProtocol::getInstance());
       }
 }
