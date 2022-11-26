@@ -1,7 +1,7 @@
 #include "ros2_bdi_behaviours/OrganizerBehaviour.hpp"
 
 /*Helper function*/
-std::vector<std::string> split(const std::string& s, char seperator= ' '){	std::vector<std::string> output;	std::string::size_type prev_pos = 0, pos = 0;	while((pos = s.find(seperator, pos)) != std::string::npos){	std::string substring( s.substr(prev_pos, pos-prev_pos) );	output.push_back(substring);	prev_pos = ++pos;	}	output.push_back(s.substr(prev_pos, pos-prev_pos));	return output;	}
+static std::vector<std::string> split(const std::string& s, char seperator= ' '){	std::vector<std::string> output;	std::string::size_type prev_pos = 0, pos = 0;	while((pos = s.find(seperator, pos)) != std::string::npos){	std::string substring( s.substr(prev_pos, pos-prev_pos) );	output.push_back(substring);	prev_pos = ++pos;	}	output.push_back(s.substr(prev_pos, pos-prev_pos));	return output;	}
 
 OrganizerBehaviour::OrganizerBehaviour(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id) : ContractNetInitiator(desire_set, belief_set, agent_id)
 {}
@@ -37,7 +37,7 @@ std::vector<ACLMessage> OrganizerBehaviour::handleAllResponses(std::vector<ACLMe
 
 	for(unsigned int i=0 ; i < numberOfResponses ; i++)
 	{
-		if(responses[i].getPerformative() != AclMsg::ACCEPT_PROPOSAL)
+		if(responses[i].getPerformative() != AclMsg::PROPOSE)
 		{
 			responses.erase(responses.begin()+i);
 		}
