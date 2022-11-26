@@ -57,6 +57,10 @@ void CfpEvaluation::entry(ContractNetResponder* contractNetResponder)
 {
 	contractNetResponder->propose = contractNetResponder->handleCfp(contractNetResponder->cfp);
 	contractNetResponder->sendMsg(contractNetResponder->propose);
+  if(contractNetResponder->propose.getPerformative() != AclMsg::PROPOSE) 
+  {
+    contractNetResponder->setState(EndProtocol::getInstance());
+  }
 }
 
 void CfpEvaluation::react(ContractNetResponder* contractNetResponder, ACLMessage const & Message)

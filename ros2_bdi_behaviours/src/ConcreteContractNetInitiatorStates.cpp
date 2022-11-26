@@ -96,7 +96,7 @@ void StoreBids::react(ContractNetInitiator* contractNetInitiator, ACLMessage con
     contractNetInitiator->responses.push_back(Message);
     contractNetInitiator->handlePropose(Message);
   }
-  else if(Message.getPerformative()==AclMsg::REJECT_PROPOSAL)
+  else if(Message.getPerformative()==AclMsg::REFUSE)
   {
     contractNetInitiator->responses.push_back(Message);
     contractNetInitiator->handleReject(Message);
