@@ -35,6 +35,7 @@
 #include "ros2_bdi_behaviours/ContractNetInitiator.hpp"
 #include "ros2_bdi_behaviours/OutgoingMessage.hpp"
 #include "ros2_bdi_behaviours/OrganizerBehaviour.hpp"
+#include "ros2_bdi_behaviours/TransporterBehaviour.hpp"
 
 #include "ros2_bdi_behaviours/ACLMessage.hpp"
 #include "ros2_bdi_behaviours/MessageTemplate.hpp"

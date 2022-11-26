@@ -32,8 +32,8 @@ public:
 	void react(ACLMessage const & event);
 	void react(ActionOver const & event);
 
-	virtual ACLMessage handleCfp(ACLMessage cfp) { return ACLMessage();};
-	virtual ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) { return ACLMessage();};
+	virtual ACLMessage handleCfp(ACLMessage cfp) = 0;
+	virtual ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) = 0;
 	virtual void handleRejectProposal(ACLMessage cfp, ACLMessage propose, ACLMessage reject) { };
 
 	ACLMessage cfp, propose, accept, inform, reject;

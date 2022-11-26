@@ -23,6 +23,7 @@ set(BEHAVIOURS-SOURCES
   src/ConcreteOutgoingMessageStates.cpp
   src/OutgoingMessage.cpp
   src/OrganizerBehaviour.cpp
+  src/TransporterBehaviour.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${BEHAVIOURS-SOURCES})
