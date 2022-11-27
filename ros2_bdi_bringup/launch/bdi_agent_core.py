@@ -189,12 +189,12 @@ def build_PlanDirector(namespace, agent_id, init_params):
 
 
 '''
-    Communication MA Request Handler Node builder, pass init_params to check, eval and set init parameters for the node
+    Communication ACL Communicator Node builder, pass init_params to check, eval and set init parameters for the node
     Agent group id is needed too
 '''
-def build_MARequestHandlerNode(namespace, agent_id, agent_group, init_params):
+def build_ACLCommunicator(namespace, agent_id, agent_group, init_params):
 
-    debug = (DEBUG_ACTIVE_NODES_PARAM in init_params) and ('ma_request_handler' in init_params[DEBUG_ACTIVE_NODES_PARAM])
+    debug = (DEBUG_ACTIVE_NODES_PARAM in init_params) and ('acl_communicator' in init_params[DEBUG_ACTIVE_NODES_PARAM])
 
     # Default init params for Communication Node
     communication_node_params = [
@@ -217,8 +217,8 @@ def build_MARequestHandlerNode(namespace, agent_id, agent_group, init_params):
 
     return Node(
         package='ros2_bdi_core',
-        executable='ma_request_handler',
-        name='ma_request_handler',
+        executable='acl_communicator',
+        name='acl_communicator',
         namespace=namespace,
         output='screen',
         parameters=communication_node_params + [{PLANNING_MODE_PARAM: planning_mode},]

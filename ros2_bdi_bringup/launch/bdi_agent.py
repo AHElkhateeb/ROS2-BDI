@@ -187,9 +187,9 @@ def AgentLaunchDescription(
         plan_director = build_PlanDirector(namespace, agent_id, init_params)
         
         '''
-            [*] COMMUNICATION Multi Agent MA Request Handler NODE init.
+            [*] COMMUNICATION ACL COMMUNICATOR NODE init.
         '''
-        ma_request_handler = build_MARequestHandlerNode(namespace, agent_id, agent_group, init_params)
+        acl_communicator = build_ACLCommunicator(namespace, agent_id, agent_group, init_params)
         
         '''
             [*] EVENT LISTENER NODE init.
@@ -208,7 +208,7 @@ def AgentLaunchDescription(
         #Add plan director
         ld.add_action(plan_director)
         #Add communication manager node
-        ld.add_action(ma_request_handler)
+        ld.add_action(acl_communicator)
         #Add event listener node
         ld.add_action(event_listener)
         
