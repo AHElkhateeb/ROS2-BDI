@@ -6,7 +6,7 @@ using ros2_bdi_interfaces::msg::AclMsg;
 
 	ACLMessage::ACLMessage()
 	{
-		performative_ = "NOT_UNDERSTOOD"; //TO-DO define constants
+		performative_ = AclMsg::NOT_UNDERSTOOD;
 	}
 
 	ACLMessage::ACLMessage(string performative)
@@ -198,7 +198,7 @@ using ros2_bdi_interfaces::msg::AclMsg;
 
 	void ACLMessage::reset()
 	{
-		performative_= "NOT_UNDERSTOOD"; //TO-DO define constant;
+		performative_= AclMsg::NOT_UNDERSTOOD;
 		sender_.clear();
 		receiver_.clear();
 		reply_to_.clear();
