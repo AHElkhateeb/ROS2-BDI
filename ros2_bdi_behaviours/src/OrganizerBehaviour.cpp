@@ -45,6 +45,7 @@ std::vector<ACLMessage> OrganizerBehaviour::handleAllResponses(std::vector<ACLMe
 
 	unsigned int numberOfAcceptances = responses.size();
 
+	// Call for proposal content = transport payload wp_from wp_to tool_required robots_required_number_in_text
 	std::vector<std::string> task = split(cfp.getContent(), ' ');
 
 	int robots_num;

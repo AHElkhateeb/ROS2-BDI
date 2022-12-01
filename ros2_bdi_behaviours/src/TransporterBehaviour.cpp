@@ -1,7 +1,48 @@
 #include "ros2_bdi_behaviours/TransporterBehaviour.hpp"
 
-/*Helper function*/
+#define TETRABOT_SPEED 1500		//Speed in mm/s
+
+/*
+Helper functions
+*/
 static std::vector<std::string> split(const std::string& s, char seperator= ' '){	std::vector<std::string> output;	std::string::size_type prev_pos = 0, pos = 0;	while((pos = s.find(seperator, pos)) != std::string::npos){	std::string substring( s.substr(prev_pos, pos-prev_pos) );	output.push_back(substring);	prev_pos = ++pos;	}	output.push_back(s.substr(prev_pos, pos-prev_pos));	return output;	}
+
+static std::vector<float> get_coordinates(const std::string& waypoint)
+    {
+        if(waypoint == "wp_equip")
+            return {500, 500};
+        else if(waypoint == "wp_pipe")
+            return {500, 9500};
+        else if(waypoint == "wp_charge")
+            return {6500, 500};
+        else if(waypoint == "wp_toolchange")
+            return {3500, 500};
+        else if(waypoint == "wp_seat")
+            return {9500, 500};
+        else if(waypoint == "wp_fuselage")
+            return {9500, 9500};
+        else
+            return {(float)((waypoint[3] - '0')*1000 + 500), (float)((waypoint[4] - '0')*1000 + 500)};
+    }
+
+static float get_x(const std::string& waypoint)
+    {
+		return get_coordinates(waypoint)[0];
+    }
+
+static float get_y(const std::string& waypoint)
+    {
+		return get_coordinates(waypoint)[1];
+    }
+
+static int DurationCostBetween(const std::string& wp1,const std::string& wp2)
+	{
+		return sqrt( (get_x(wp1)-get_x(wp2))^2 + (get_y(wp1)-get_y(wp2))^2 ) / TETRABOT_SPEED;
+	}
+
+/*
+Constructor
+*/
 
 TransporterBehaviour::TransporterBehaviour(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id) : ContractNetResponder(desire_set, belief_set, agent_id)
 {}
@@ -12,13 +53,47 @@ Specific to implementation
 
 ACLMessage TransporterBehaviour::handleCfp(ACLMessage cfp)
 {
-	ACLMessage propose = cfp.createReply();
-	int cost = 100;
+	// Call for proposal content = transport payload wp_from wp_to tool_required robots_required_number_in_text
 
 	RCLCPP_INFO(node_->get_logger(), "Received a call for proposal from agent "+cfp.getSender()+" for "+cfp.getContent());
+
+	ACLMessage propose = cfp.createReply();
 	
-	propose.setPerformative(AclMsg::PROPOSE);
-	propose.setContent( std::to_string(cost) );
+	int duration_cost = 100;
+	bool RequiredToolMounted;
+	bool EnoughBattery;
+
+	std::vector<std::string> task = split(cfp.getContent(), ' ');
+	
+	//ManagedBelief(const std::string& name,const int& pddl_type,const ManagedType& type);
+	/*
+	- create functions to check if belief is true
+	- find and return the belief, for predicates
+	- check value for functions
+	*/
+	std::string ToolMounted = ;
+	std::string Battery = ;
+
+	RequiredToolMounted = (ToolMounted == task[4]);
+	EnoughBattery = (Battery >= 30);
+	
+	if(RequiredToolMounted && EnoughBattery)
+		duration_cost= DurationCostBetween(current_wp, payload);
+	else if(!RequiredToolMounted && EnoughBattery)
+		duration_cost= DurationCostBetween(current_wp, wp_Toolchange) + 2 + DurationCostBetween(wp_Toolchange, payload);
+	else if(!EnoughBattery && RequiredToolMounted)
+		duration_cost= DurationCostBetween(current_wp, wp_charge) + 4 + DurationCostBetween(wp_charge, payload);
+	else 
+		duration_cost= DurationCostBetween(current_wp, wp_charge) + 4 + DurationCostBetween(wp_charge, wp_Toolchange) + 2 + DurationCostBetween(wp_Toolchange, payload);
+
+
+	propose.setContent( std::to_string(duration_cost) );
+
+
+	if(duration_cost > 20) // greater than 20 seconds
+		propose.setPerformative(AclMsg::REFUSE);
+	else
+		propose.setPerformative(AclMsg::PROPOSE);
 
 	return propose;
 }
@@ -27,10 +102,23 @@ ACLMessage TransporterBehaviour::handleAcceptProposal(ACLMessage cfp, ACLMessage
 {
 	ACLMessage inform = accept.createReply();
 	
-	RCLCPP_INFO(node_->get_logger(), "Agent "+accept.getSender()+" accepted the proposal with cost "+propose.getContent());
+	RCLCPP_INFO(node_->get_logger(), "Agent "+accept.getSender()+" accepted the proposal with duration cost of "+propose.getContent()+"seconds");
 
-	inform.setPerformative(AclMsg::INFORM);
-	inform.setContent("Transportation Successful");
+	/*
+	add desire request and monitor
+	
+	if monitored desire fulfilled
+		send Inform
+	else
+		send Failure
+	*/
+	
+	//if(SUCCESSFUL)
+		inform.setPerformative(AclMsg::INFORM);
+		inform.setContent("Transportation Successful");
+	//ELSE
+		inform.setPerformative(AclMsg::FAILURE);
+		inform.setContent("Transportation Failed");
 
 	return inform;
 }
