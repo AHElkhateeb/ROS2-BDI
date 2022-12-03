@@ -2,7 +2,7 @@
 
 	MessageTemplate::MessageTemplate()
 	{
-		performative_ = "NOT_UNDERSTOOD"; //TO-DO define constants
+		performative_ = AclMsg::NOT_UNDERSTOOD;
 	}
 
 	MessageTemplate::MessageTemplate(ACLMessage msg)
@@ -24,7 +24,7 @@
 
 	void MessageTemplate::reset()
 	{
-		performative_= "NOT_UNDERSTOOD"; //TO-DO define constant;
+		performative_= AclMsg::NOT_UNDERSTOOD;
 		sender_.clear();
 		receiver_.clear();
 		reply_to_.clear();
@@ -123,7 +123,7 @@
 			if(msg.getProtocol() != protocol_)
 				return false;
 
-		if(performative_ != "NOT_UNDERSTOOD")
+		if(performative_ != AclMsg::NOT_UNDERSTOOD)
 			if(msg.getPerformative() != performative_)
 				return false;
 
