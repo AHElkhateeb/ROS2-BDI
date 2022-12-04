@@ -139,7 +139,7 @@ bool ConversationsClient::checkBelief(BDIManaged::ManagedBelief belief)
     return belief_set_.count(belief) == 1;
 }
 
-BDIManaged::ManagedBelief ConversationsClient::getBelief(string name, std::vector<string> params)
+ros2_bdi_interfaces::msg::Belief ConversationsClient::getBelief(string name, std::vector<string> params)
 {
     int matched_params;
 
@@ -148,8 +148,10 @@ BDIManaged::ManagedBelief ConversationsClient::getBelief(string name, std::vecto
         matched_params = 0;
         
         if(b.getName() == name)
-        {
-            for(int i=0 ; i < params.size() ; i++)
+        {   
+            int bounds = (b.getParams().size() > params.size()) ? params.size() : b.getParams().size();
+
+            for(int i=0 ; i < bounds ; i++)
             {
                 if(b.getParams()[i].name == params[i])
                 {
@@ -159,13 +161,13 @@ BDIManaged::ManagedBelief ConversationsClient::getBelief(string name, std::vecto
             
             if(matched_params==params.size())
             {
-                return b;
+                return b.toBelief();
             }
         }
     }
 
     BDIManaged::ManagedBelief empty_belief;
-    return empty_belief;
+    return empty_belief.toBelief();
 }
 
 void ConversationsClient::addDesire(BDIManaged::ManagedDesire desire)

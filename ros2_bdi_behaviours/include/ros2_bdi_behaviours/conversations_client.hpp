@@ -34,7 +34,7 @@ namespace ACLConversations{
             void addBelief(BDIManaged::ManagedBelief belief);
             void deleteBelief(BDIManaged::ManagedBelief belief);
             bool checkBelief(BDIManaged::ManagedBelief belief);
-            BDIManaged::ManagedBelief getBelief(string name, std::vector<string> params);
+            ros2_bdi_interfaces::msg::Belief getBelief(string name, std::vector<string> params);
 
             void addDesire(BDIManaged::ManagedDesire desire);
             void deleteDesire(BDIManaged::ManagedDesire desire);
