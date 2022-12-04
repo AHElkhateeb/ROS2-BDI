@@ -619,6 +619,7 @@ void ACLCommunicator::handleIncomingMsg(const ros2_bdi_interfaces::msg::AclMsg::
       if(msg_received.getConversationId() == "") { msg_received.setConversationId( agent_id_+CURRENT_TIME_MILLIS ); }
 
       //add to list of conversations and dispatch a new ConversationClient Node
+      /*TO-DO move messsage template definitions outside of the callback function*/
       MessageTemplate msg_outgoing, msg_cnet_init, msg_cnet_respond;
       
       msg_outgoing.matchSender(agent_id_);
