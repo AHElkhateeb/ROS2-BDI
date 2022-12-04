@@ -124,19 +124,19 @@ void ConversationsClient::deleteConvID()
     this->del_conv_client_publisher_->publish(std_msgs::msg::String().set__data(this->ConversationId_));
 }
 
-void ConversationsClient::addBelief(BDIManaged::ManagedBelief belief)
+void ConversationsClient::addBelief(ros2_bdi_interfaces::msg::Belief belief)
 {
-    this->add_belief_publisher_->publish(belief.toBelief());
+    this->add_belief_publisher_->publish(belief);
 }
 
-void ConversationsClient::deleteBelief(BDIManaged::ManagedBelief belief)
+void ConversationsClient::deleteBelief(ros2_bdi_interfaces::msg::Belief belief)
 {
-    this->del_belief_publisher_->publish(belief.toBelief());
+    this->del_belief_publisher_->publish(belief);
 }
 
-bool ConversationsClient::checkBelief(BDIManaged::ManagedBelief belief)
+bool ConversationsClient::checkBelief(ros2_bdi_interfaces::msg::Belief belief)
 {
-    return belief_set_.count(belief) == 1;
+    return belief_set_.count(ManagedBelief{belief}) == 1;
 }
 
 ros2_bdi_interfaces::msg::Belief ConversationsClient::getBelief(string name, std::vector<string> params)
@@ -170,17 +170,17 @@ ros2_bdi_interfaces::msg::Belief ConversationsClient::getBelief(string name, std
     return empty_belief.toBelief();
 }
 
-void ConversationsClient::addDesire(BDIManaged::ManagedDesire desire)
+void ConversationsClient::addDesire(ros2_bdi_interfaces::msg::Desire desire)
 {
-    this->add_desire_publisher_->publish(desire.toDesire());
+    this->add_desire_publisher_->publish(desire);
 }
 
-void ConversationsClient::deleteDesire(BDIManaged::ManagedDesire desire)
+void ConversationsClient::deleteDesire(ros2_bdi_interfaces::msg::Desire desire)
 {
-    this->del_desire_publisher_->publish(desire.toDesire());
+    this->del_desire_publisher_->publish(desire);
 }
 
-bool ConversationsClient::checkDesire(BDIManaged::ManagedDesire desire)
+bool ConversationsClient::checkDesire(ros2_bdi_interfaces::msg::Desire desire)
 {
-    return desire_set_.count(desire) == 1;
+    return desire_set_.count(ManagedDesire{desire}) == 1;
 }

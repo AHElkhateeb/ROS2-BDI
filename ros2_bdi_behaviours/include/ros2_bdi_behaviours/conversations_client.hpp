@@ -31,14 +31,14 @@ namespace ACLConversations{
             int sendMsg(ACLMessage msg);
             int sendMsg(std::vector<ACLMessage> msgs);
 
-            void addBelief(BDIManaged::ManagedBelief belief);
-            void deleteBelief(BDIManaged::ManagedBelief belief);
-            bool checkBelief(BDIManaged::ManagedBelief belief);
+            void addBelief(ros2_bdi_interfaces::msg::Belief belief);
+            void deleteBelief(ros2_bdi_interfaces::msg::Belief belief);
+            bool checkBelief(ros2_bdi_interfaces::msg::Belief belief);
             ros2_bdi_interfaces::msg::Belief getBelief(string name, std::vector<string> params);
 
-            void addDesire(BDIManaged::ManagedDesire desire);
-            void deleteDesire(BDIManaged::ManagedDesire desire);
-            bool checkDesire(BDIManaged::ManagedDesire desire);
+            void addDesire(ros2_bdi_interfaces::msg::Desire desire);
+            void deleteDesire(ros2_bdi_interfaces::msg::Desire desire);
+            bool checkDesire(ros2_bdi_interfaces::msg::Desire desire);
 
             //del_conv publisher
             rclcpp::Publisher<std_msgs::msg::String>::SharedPtr del_conv_client_publisher_;
