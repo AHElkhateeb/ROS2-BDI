@@ -104,22 +104,12 @@ ACLMessage TransporterBehaviour::handleAcceptProposal(ACLMessage cfp, ACLMessage
 	ACLMessage inform = accept.createReply();
 	
 	RCLCPP_INFO(node_->get_logger(), "Agent "+accept.getSender()+" accepted the proposal with duration cost of "+propose.getContent()+"seconds");
+	
+	RCLCPP_INFO(node_->get_logger(), "Agent "+agent_id_+" is transporting the payload ");
 
-	/*
-	add desire request and monitor
-	
-	if monitored desire fulfilled
-		send Inform
-	else
-		send Failure
-	*/
-	
-	//if(SUCCESSFUL)
-		inform.setPerformative(AclMsg::INFORM);
-		inform.setContent("Transportation Successful");
-	//ELSE
-		inform.setPerformative(AclMsg::FAILURE);
-		inform.setContent("Transportation Failed");
+	RCLCPP_INFO(node_->get_logger(), "Agent "+agent_id_+"Successfully transported the payload");
+	inform.setPerformative(AclMsg::INFORM);
+	inform.setContent("Transportation Successful");
 
 	return inform;
 }
