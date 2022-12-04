@@ -63,31 +63,30 @@ ACLMessage TransporterBehaviour::handleCfp(ACLMessage cfp)
 	bool RequiredToolMounted;
 	bool EnoughBattery;
 
+	// Call for proposal content = transport payload wp_from wp_to tool_required robots_required_number_in_text
 	std::vector<std::string> task = split(cfp.getContent(), ' ');
+
+	std::string wp_payload = task[2];
+	std::string wp_to = task[3];
 	
 	//ManagedBelief(const std::string& name,const int& pddl_type,const ManagedType& type);
-	/*
-	- create functions to check if belief is true
-	- find and return the belief, for predicates
-	- check value for functions
-	*/
+	//name:"tool_mounted" params:"tetrabotID" "tool"
 
-	/*
-	std::string ToolMounted = ;
-	std::string Battery = ;
+	std::string ToolMounted = getBelief("tool_mounted",{agent_id_}).params[1];
+	int Battery = getBelief("battery_charge",{agent_id_}).value;
+	std::string current_wp = getBelief("in",{agent_id_}).params[1];
 
 	RequiredToolMounted = (ToolMounted == task[4]);
 	EnoughBattery = (Battery >= 30);
 	
 	if(RequiredToolMounted && EnoughBattery)
-		duration_cost= DurationCostBetween(current_wp, payload);
+		duration_cost= DurationCostBetween(current_wp, wp_payload);
 	else if(!RequiredToolMounted && EnoughBattery)
-		duration_cost= DurationCostBetween(current_wp, wp_Toolchange) + 2 + DurationCostBetween(wp_Toolchange, payload);
+		duration_cost= DurationCostBetween(current_wp, "wp_toolchange") + 2 + DurationCostBetween("wp_toolchange", wp_payload);
 	else if(!EnoughBattery && RequiredToolMounted)
-		duration_cost= DurationCostBetween(current_wp, wp_charge) + 4 + DurationCostBetween(wp_charge, payload);
+		duration_cost= DurationCostBetween(current_wp, "wp_charge") + 4 + DurationCostBetween("wp_charge", wp_payload);
 	else 
-		duration_cost= DurationCostBetween(current_wp, wp_charge) + 4 + DurationCostBetween(wp_charge, wp_Toolchange) + 2 + DurationCostBetween(wp_Toolchange, payload);
-	*/
+		duration_cost= DurationCostBetween(current_wp, "wp_charge") + 4 + DurationCostBetween("wp_charge", "wp_toolchange") + 2 + DurationCostBetween("wp_toolchange", wp_payload);
 
 	propose.setContent( std::to_string(duration_cost) );
 
