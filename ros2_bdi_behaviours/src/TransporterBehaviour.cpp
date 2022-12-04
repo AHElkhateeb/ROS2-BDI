@@ -37,7 +37,7 @@ static float get_y(const std::string& waypoint)
 
 static int DurationCostBetween(const std::string& wp1,const std::string& wp2)
 	{
-		return sqrt( (get_x(wp1)-get_x(wp2))^2 + (get_y(wp1)-get_y(wp2))^2 ) / TETRABOT_SPEED;
+		return sqrt( pow((double)(get_x(wp1)-get_x(wp2)), 2) + pow((double)(get_y(wp1)-get_y(wp2)), 2) ) / TETRABOT_SPEED;
 	}
 
 /*
@@ -71,6 +71,8 @@ ACLMessage TransporterBehaviour::handleCfp(ACLMessage cfp)
 	- find and return the belief, for predicates
 	- check value for functions
 	*/
+
+	/*
 	std::string ToolMounted = ;
 	std::string Battery = ;
 
@@ -85,7 +87,7 @@ ACLMessage TransporterBehaviour::handleCfp(ACLMessage cfp)
 		duration_cost= DurationCostBetween(current_wp, wp_charge) + 4 + DurationCostBetween(wp_charge, payload);
 	else 
 		duration_cost= DurationCostBetween(current_wp, wp_charge) + 4 + DurationCostBetween(wp_charge, wp_Toolchange) + 2 + DurationCostBetween(wp_Toolchange, payload);
-
+	*/
 
 	propose.setContent( std::to_string(duration_cost) );
 
