@@ -8,6 +8,8 @@
 #include "ros2_bdi_utils/ManagedBelief.hpp"
 #include "ros2_bdi_utils/ManagedDesire.hpp"
 #include "ros2_bdi_interfaces/msg/acl_msg.hpp"
+#include "ros2_bdi_interfaces/msg/belief.hpp"
+#include "ros2_bdi_interfaces/msg/desire.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
@@ -29,8 +31,25 @@ namespace ACLConversations{
             int sendMsg(ACLMessage msg);
             int sendMsg(std::vector<ACLMessage> msgs);
 
+            void addBelief(BDIManaged::ManagedBelief belief);
+            void deleteBelief(BDIManaged::ManagedBelief belief);
+            bool checkBelief(BDIManaged::ManagedBelief belief);
+            BDIManaged::ManagedBelief getBelief(string name, std::vector<string> params);
+
+            void addDesire(BDIManaged::ManagedDesire desire);
+            void deleteDesire(BDIManaged::ManagedDesire desire);
+            bool checkDesire(BDIManaged::ManagedDesire desire);
+
             //del_conv publisher
             rclcpp::Publisher<std_msgs::msg::String>::SharedPtr del_conv_client_publisher_;
+            //add belief topic publisher
+            rclcpp::Publisher<ros2_bdi_interfaces::msg::Belief>::SharedPtr add_belief_publisher_;
+            //del belief topic publisher
+            rclcpp::Publisher<ros2_bdi_interfaces::msg::Belief>::SharedPtr del_belief_publisher_;
+            //add desire topic publisher
+            rclcpp::Publisher<ros2_bdi_interfaces::msg::Desire>::SharedPtr add_desire_publisher_;
+            //del desire topic publisher
+            rclcpp::Publisher<ros2_bdi_interfaces::msg::Desire>::SharedPtr del_desire_publisher_;
 
             void deleteConvID();
 

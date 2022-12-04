@@ -20,6 +20,8 @@
 
 using std::string;
 using ros2_bdi_interfaces::msg::AclMsg;
+using ros2_bdi_interfaces::msg::Belief;
+using ros2_bdi_interfaces::msg::Desire;
 
 using ACLConversations::ConversationsClient;
 
@@ -35,7 +37,18 @@ ConversationsClient::ConversationsClient(std::set<BDIManaged::ManagedDesire>* de
     node_ = rclcpp::Node::make_shared("conversations_client"+agent_id_+"_"+ConversationId_);
     RCLCPP_INFO(node_->get_logger(), "ConvID not found, Node Created");
 
+    // del conversation client publisher -> to publish on the topic and alter the conversations set
     del_conv_client_publisher_ = node_->create_publisher<std_msgs::msg::String>(DEL_CONV_TOPIC, 10);
+
+    // add belief publisher -> to publish on the topic and alter the belief set
+    add_belief_publisher_ = node_->create_publisher<Belief>(ADD_BELIEF_TOPIC, 10);
+    // del belief publisher -> to publish on the topic and alter the belief set
+    del_belief_publisher_ = node_->create_publisher<Belief>(DEL_BELIEF_TOPIC, 10);
+
+    // add desire publisher -> to publish on the topic and alter the desire set
+    add_desire_publisher_ = node_->create_publisher<Desire>(ADD_DESIRE_TOPIC, 10);
+    // del desire publisher -> to publish on the topic and alter the desire set
+    del_desire_publisher_ = node_->create_publisher<Desire>(DEL_DESIRE_TOPIC, 10);
 }
 
 void ConversationsClient::receiveMsg(ACLMessage msg)
@@ -109,4 +122,63 @@ int ConversationsClient::sendMsg(std::vector<ACLMessage> msgs)
 void ConversationsClient::deleteConvID()
 {
     this->del_conv_client_publisher_->publish(std_msgs::msg::String().set__data(this->ConversationId_));
+}
+
+void ConversationsClient::addBelief(BDIManaged::ManagedBelief belief)
+{
+    this->add_belief_publisher_->publish(belief.toBelief());
+}
+
+void ConversationsClient::deleteBelief(BDIManaged::ManagedBelief belief)
+{
+    this->del_belief_publisher_->publish(belief.toBelief());
+}
+
+bool ConversationsClient::checkBelief(BDIManaged::ManagedBelief belief)
+{
+    return belief_set_.count(belief) == 1;
+}
+
+BDIManaged::ManagedBelief ConversationsClient::getBelief(string name, std::vector<string> params)
+{
+    int matched_params;
+
+    for(BDIManaged::ManagedBelief b : belief_set_)
+    {
+        matched_params = 0;
+        
+        if(b.getName() == name)
+        {
+            for(int i=0 ; i < params.size() ; i++)
+            {
+                if(b.getParams()[i].name == params[i])
+                {
+                    matched_params++;
+                }
+            }
+            
+            if(matched_params==params.size())
+            {
+                return b;
+            }
+        }
+    }
+
+    BDIManaged::ManagedBelief empty_belief;
+    return empty_belief;
+}
+
+void ConversationsClient::addDesire(BDIManaged::ManagedDesire desire)
+{
+    this->add_desire_publisher_->publish(desire.toDesire());
+}
+
+void ConversationsClient::deleteDesire(BDIManaged::ManagedDesire desire)
+{
+    this->del_desire_publisher_->publish(desire.toDesire());
+}
+
+bool ConversationsClient::checkDesire(BDIManaged::ManagedDesire desire)
+{
+    return desire_set_.count(desire) == 1;
 }
