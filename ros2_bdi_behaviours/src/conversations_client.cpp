@@ -63,6 +63,7 @@ int ConversationsClient::sendMsg(ACLMessage msg)
     string topicName;
     int sentMsgs=0;
 
+    RCLCPP_INFO(node_->get_logger(), "The sendMsg function is sending message with "+(this->ConversationId_)+ " previous convID was: " + msg.getConversationId());
     //TO-DO: msg.setSender("AGENT_ID"); //This Agent's ID should be added here
     msg.setConversationId(this->ConversationId_); //The Conversation ID should be set here
     msg.setSender(this->agent_id_);

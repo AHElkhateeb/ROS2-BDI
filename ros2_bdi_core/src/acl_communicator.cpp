@@ -616,6 +616,7 @@ void ACLCommunicator::handleIncomingMsg(const ros2_bdi_interfaces::msg::AclMsg::
   
   if(conversations.find(msg_received.getConversationId()) == conversations.end()) //NotFound
     {
+      RCLCPP_INFO(this->get_logger(), "Message received with ConvID: " + msg_received.getConversationId() + " which is part of a new conversation");
       if(msg_received.getConversationId() == "") { msg_received.setConversationId( agent_id_+CURRENT_TIME_MILLIS ); }
 
       //add to list of conversations and dispatch a new ConversationClient Node

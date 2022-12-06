@@ -92,9 +92,15 @@ ACLMessage TransporterBehaviour::handleCfp(ACLMessage cfp)
 
 
 	if(duration_cost > 20) // greater than 20 seconds
+	{
 		propose.setPerformative(AclMsg::REFUSE);
+		RCLCPP_INFO(node_->get_logger(), "Refused to send a bid because the cost is "+std::to_string(duration_cost)+" which is higher than 20");
+	}
 	else
+	{
 		propose.setPerformative(AclMsg::PROPOSE);
+		RCLCPP_INFO(node_->get_logger(), "Sent a bid because the cost is "+std::to_string(duration_cost)+" which is lower than 20");
+	}
 
 	return propose;
 }
