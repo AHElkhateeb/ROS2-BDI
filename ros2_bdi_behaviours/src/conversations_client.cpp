@@ -22,6 +22,8 @@ using std::string;
 using ros2_bdi_interfaces::msg::AclMsg;
 using ros2_bdi_interfaces::msg::Belief;
 using ros2_bdi_interfaces::msg::Desire;
+using BDIManaged::ManagedBelief;
+using BDIManaged::ManagedDesire;
 
 using ACLConversations::ConversationsClient;
 
