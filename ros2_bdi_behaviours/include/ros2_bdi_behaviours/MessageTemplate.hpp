@@ -35,17 +35,17 @@ public:
 	MessageTemplate(ACLMessage msg);
 	bool isMatch(ACLMessage msg);
 	void reset();
-	MessageTemplate matchContent(string content);
-	MessageTemplate matchConversationId(string conversation_id);
-	MessageTemplate matchEncoding(string encoding);
-	MessageTemplate matchInReplyTo(string in_reply_to);
-	MessageTemplate matchLanguage(string language);
-	MessageTemplate matchOntology(string ontology);
-	MessageTemplate matchPerformative(string performative);
-	MessageTemplate matchProtocol(string protocol);
-	MessageTemplate matchReplyBy(float reply_by);
-	MessageTemplate matchReplyWith(string reply_with);
-	MessageTemplate matchSender(string sender);
+	void matchContent(string content);
+	void matchConversationId(string conversation_id);
+	void matchEncoding(string encoding);
+	void matchInReplyTo(string in_reply_to);
+	void matchLanguage(string language);
+	void matchOntology(string ontology);
+	void matchPerformative(string performative);
+	void matchProtocol(string protocol);
+	void matchReplyBy(float reply_by);
+	void matchReplyWith(string reply_with);
+	void matchSender(string sender);
 };
 
 

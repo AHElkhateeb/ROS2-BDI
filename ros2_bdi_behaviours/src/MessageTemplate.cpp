@@ -39,70 +39,59 @@
 		reply_by_= 0.0f;
 	}
 
-	MessageTemplate MessageTemplate::matchContent(string content)
+	void MessageTemplate::matchContent(string content)
 	{
-		content_= content;
-		return *this;	
+		content_= content;	
 	}
 
-	MessageTemplate MessageTemplate::matchConversationId(string conversation_id)
+	void MessageTemplate::matchConversationId(string conversation_id)
 	{
 		conversation_id_= conversation_id;
-		return *this;
 	}
 
-	MessageTemplate MessageTemplate::matchEncoding(string encoding)
+	void MessageTemplate::matchEncoding(string encoding)
 	{
 		encoding_=encoding;
-		return *this;
 	}
 
-	MessageTemplate MessageTemplate::matchInReplyTo(string in_reply_to)
+	void MessageTemplate::matchInReplyTo(string in_reply_to)
 	{
 		in_reply_to_= in_reply_to;
-		return *this;
 	}
 
-	MessageTemplate MessageTemplate::matchLanguage(string language)
+	void MessageTemplate::matchLanguage(string language)
 	{
 		language_= language;
-		return *this;
 	}
 
-	MessageTemplate MessageTemplate::matchOntology(string ontology)
+	void MessageTemplate::matchOntology(string ontology)
 	{
 		ontology_= ontology;
-		return *this;
 	}
 
-	MessageTemplate MessageTemplate::matchPerformative(string performative)
+	void MessageTemplate::matchPerformative(string performative)
 	{
 		performative_= performative;
-		return *this;
 	}
 
-	MessageTemplate MessageTemplate::matchProtocol(string protocol)
+	void MessageTemplate::matchProtocol(string protocol)
 	{
 		protocol_= protocol;
-		return *this;
 	}
 
-	MessageTemplate MessageTemplate::matchReplyBy(float reply_by)
+	void MessageTemplate::matchReplyBy(float reply_by)
 	{
 		reply_by_= reply_by;
-		return *this;
 	}
 
-	MessageTemplate MessageTemplate::matchReplyWith(string reply_with)
+	void MessageTemplate::matchReplyWith(string reply_with)
 	{
 		reply_with_= reply_with;
-		return *this;
 	}
 
-	MessageTemplate MessageTemplate::matchSender(string sender)
+	void MessageTemplate::matchSender(string sender)
 	{
 		sender_= sender;
-		return *this;
 	}
 
 	bool MessageTemplate::isMatch(ACLMessage msg)

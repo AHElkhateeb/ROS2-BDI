@@ -623,7 +623,8 @@ void ACLCommunicator::handleIncomingMsg(const ros2_bdi_interfaces::msg::AclMsg::
       MessageTemplate msg_outgoing, msg_cnet_init, msg_cnet_respond;
       
       msg_outgoing.matchSender(agent_id_);
-      msg_cnet_init.matchProtocol(AclMsg::FIPA_CONTRACT_NET).matchSender(agent_id_);
+      msg_cnet_init.matchProtocol(AclMsg::FIPA_CONTRACT_NET);
+      msg_cnet_init.matchSender(agent_id_);
       msg_cnet_respond.matchProtocol(AclMsg::FIPA_CONTRACT_NET);
 
       if(msg_cnet_init.isMatch(msg_received))
