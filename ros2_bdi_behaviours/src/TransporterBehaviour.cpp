@@ -59,9 +59,37 @@ ACLMessage TransporterBehaviour::handleCfp(ACLMessage cfp)
 
 	ACLMessage propose = cfp.createReply();
 	
+	RCLCPP_INFO(node_->get_logger(), "In handleCFP: The receiver field of the propose message contains: "+propose.getReceivers()[0]+" and the sender contains: "+propose.getSender());
+
 	int duration_cost = 100;
-	bool RequiredToolMounted;
-	bool EnoughBattery;
+	bool RequiredToolMounted=true;
+	bool EnoughBattery=true;
+	std::string current_wp = "wp_45";
+
+	if(agent_id_=="tetrabotALF")
+	{
+		RequiredToolMounted=true;
+		EnoughBattery=true;
+		current_wp = "wp_25";
+	}
+	else if(agent_id_=="tetrabotDORIE")
+	{
+		RequiredToolMounted=true;
+		EnoughBattery=true;
+		current_wp = "wp_94";
+	}
+	else if(agent_id_=="tetrabotBERT")
+	{
+		RequiredToolMounted=true;
+		EnoughBattery=true;
+		current_wp = "wp_71";
+	}
+	else if(agent_id_=="tetrabotC3PO")
+	{
+		RequiredToolMounted=true;
+		EnoughBattery=true;
+		current_wp = "wp_08";
+	}
 
 	// Call for proposal content = transport payload wp_from wp_to tool_required robots_required_number_in_text
 	std::vector<std::string> task = split(cfp.getContent(), ' ');
@@ -72,12 +100,12 @@ ACLMessage TransporterBehaviour::handleCfp(ACLMessage cfp)
 	//ManagedBelief(const std::string& name,const int& pddl_type,const ManagedType& type);
 	//name:"tool_mounted" params:"tetrabotID" "tool"
 
-	std::string ToolMounted = getBelief("tool_mounted",{agent_id_}).params[1];
-	int Battery = getBelief("battery_charge",{agent_id_}).value;
-	std::string current_wp = getBelief("in",{agent_id_}).params[1];
+	//std::string ToolMounted = getBelief("tool_mounted",{agent_id_}).params[1];
+	//int Battery = getBelief("battery_charge",{agent_id_}).value;
+	//std::string current_wp = getBelief("in",{agent_id_}).params[1];
 
-	RequiredToolMounted = (ToolMounted == task[4]);
-	EnoughBattery = (Battery >= 30);
+	//RequiredToolMounted = (ToolMounted == task[4]);
+	//EnoughBattery = (Battery >= 30);
 	
 	if(RequiredToolMounted && EnoughBattery)
 		duration_cost= round( DurationCostBetween(current_wp, wp_payload) );
