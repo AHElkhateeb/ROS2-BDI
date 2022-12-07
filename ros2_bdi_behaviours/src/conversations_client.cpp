@@ -81,6 +81,8 @@ int ConversationsClient::sendMsg(ACLMessage msg)
         if( msg_publisher->get_subscription_count() > 0 )
         {
             msg_publisher->publish(ros2Msg);
+            rclcpp::sleep_for(std::chrono::milliseconds(2));
+            RCLCPP_INFO(node_->get_logger(), "The subscriber to the "+topicName+" topic is available and message sent out to him");
             sentMsgs++;
         }
     }
@@ -118,6 +120,8 @@ int ConversationsClient::sendMsg(std::vector<ACLMessage> msgs)
                 if( msg_publisher->get_subscription_count() > 0 )
                 {
                     msg_publisher->publish(ros2Msg);
+                    rclcpp::sleep_for(std::chrono::milliseconds(2));
+                    RCLCPP_INFO(node_->get_logger(), "The subscriber to the "+topicName+" topic is available and message sent out to him");
                     sentMsgs++;
                 }
             }
