@@ -667,6 +667,11 @@ int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
   auto node = std::make_shared<ACLCommunicator>();
+  node->init();
+  rclcpp::executors::MultiThreadedExecutor executor;
+  executor.add_node(node);
+  executor.spin();
+  /*
   bool psys2_booted = node->wait_psys2_boot(std::chrono::seconds(8));//Wait max 8 seconds for plansys2 to boot
   
   if(psys2_booted)
@@ -680,6 +685,7 @@ int main(int argc, char ** argv)
   {
     std::cerr << "PlanSys2 failed to boot: node will not spin and process will terminate" << std::endl;
   }
+  */
   rclcpp::shutdown();
 
   return 0;
