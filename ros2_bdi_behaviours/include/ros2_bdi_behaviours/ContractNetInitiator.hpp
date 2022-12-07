@@ -14,7 +14,7 @@ class ContractNetInitiatorState;
 class ContractNetInitiator : public ConversationsClient
 {
 public:
-	ContractNetInitiator(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id);
+	ContractNetInitiator(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id, string ConversationId);
 	inline ContractNetInitiatorState* getCurrentState() const { return currentState; }
 	void setState(ContractNetInitiatorState& newState);
 

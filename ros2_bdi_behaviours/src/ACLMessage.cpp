@@ -117,7 +117,7 @@ using ros2_bdi_interfaces::msg::AclMsg;
 
 	AclMsg ACLMessage::getMessage() const
 	{
-		AclMsg msg = AclMsg();
+		auto msg = AclMsg();
 		msg.performative = performative_;
 		msg.sender = sender_;
 		msg.receiver = receiver_;

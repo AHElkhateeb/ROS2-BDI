@@ -14,7 +14,7 @@ class OutgoingMessageState;
 class OutgoingMessage : public ConversationsClient
 {
 public:
-	OutgoingMessage(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id);
+	OutgoingMessage(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id, string ConversationId);
 	inline OutgoingMessageState* getCurrentState() const { return currentState; }
 	void setState(OutgoingMessageState& newState);
 

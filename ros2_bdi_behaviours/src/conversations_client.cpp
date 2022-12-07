@@ -32,7 +32,7 @@ using ACLConversations::ConversationsClient;
 //sendMessage() and other one in actions with different behaviour
 //Check that the message to be sent as an output of the handler functions follows the protocol message performatives
 
-ConversationsClient::ConversationsClient(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id) : desire_set_{*desire_set} , belief_set_{*belief_set} , agent_id_{agent_id}
+ConversationsClient::ConversationsClient(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id, string ConversationId) : desire_set_{*desire_set} , belief_set_{*belief_set} , agent_id_{agent_id} , ConversationId_{ConversationId}
 {
     // node to perform async request to communication services of queried agent(s)
     // make the node spin just while waiting response or until timeout is reached

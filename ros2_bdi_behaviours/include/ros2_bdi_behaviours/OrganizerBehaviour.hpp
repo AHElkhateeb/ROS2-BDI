@@ -5,7 +5,7 @@
 class OrganizerBehaviour : public ContractNetInitiator
 {
 public:
-	OrganizerBehaviour(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id);
+	OrganizerBehaviour(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id, string ConversationId);
 
 	void handlePropose(ACLMessage propose);
 	void handleReject(ACLMessage reject);

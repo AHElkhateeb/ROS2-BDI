@@ -19,7 +19,7 @@ struct ActionOver{};
 class ContractNetResponder : public ConversationsClient
 {
 public:
-	ContractNetResponder(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id);
+	ContractNetResponder(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id, string ConversationId);
 	inline ContractNetResponderState* getCurrentState() const { return currentState; }
 	void setState(ContractNetResponderState& newState);
 

@@ -35,7 +35,7 @@ static float get_y(const std::string& waypoint)
 		return get_coordinates(waypoint)[1];
     }
 
-static int DurationCostBetween(const std::string& wp1,const std::string& wp2)
+static float DurationCostBetween(const std::string& wp1,const std::string& wp2)
 	{
 		return sqrt( pow((double)(get_x(wp1)-get_x(wp2)), 2) + pow((double)(get_y(wp1)-get_y(wp2)), 2) ) / TETRABOT_SPEED;
 	}
@@ -44,7 +44,7 @@ static int DurationCostBetween(const std::string& wp1,const std::string& wp2)
 Constructor
 */
 
-TransporterBehaviour::TransporterBehaviour(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id) : ContractNetResponder(desire_set, belief_set, agent_id)
+TransporterBehaviour::TransporterBehaviour(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id, string ConversationId) : ContractNetResponder(desire_set, belief_set, agent_id, ConversationId)
 {}
 
 /*
@@ -80,13 +80,13 @@ ACLMessage TransporterBehaviour::handleCfp(ACLMessage cfp)
 	EnoughBattery = (Battery >= 30);
 	
 	if(RequiredToolMounted && EnoughBattery)
-		duration_cost= DurationCostBetween(current_wp, wp_payload);
+		duration_cost= round( DurationCostBetween(current_wp, wp_payload) );
 	else if(!RequiredToolMounted && EnoughBattery)
-		duration_cost= DurationCostBetween(current_wp, "wp_toolchange") + 2 + DurationCostBetween("wp_toolchange", wp_payload);
+		duration_cost= round( DurationCostBetween(current_wp, "wp_toolchange") + 2 + DurationCostBetween("wp_toolchange", wp_payload) );
 	else if(!EnoughBattery && RequiredToolMounted)
-		duration_cost= DurationCostBetween(current_wp, "wp_charge") + 4 + DurationCostBetween("wp_charge", wp_payload);
+		duration_cost= round( DurationCostBetween(current_wp, "wp_charge") + 4 + DurationCostBetween("wp_charge", wp_payload) );
 	else 
-		duration_cost= DurationCostBetween(current_wp, "wp_charge") + 4 + DurationCostBetween("wp_charge", "wp_toolchange") + 2 + DurationCostBetween("wp_toolchange", wp_payload);
+		duration_cost= round( DurationCostBetween(current_wp, "wp_charge") + 4 + DurationCostBetween("wp_charge", "wp_toolchange") + 2 + DurationCostBetween("wp_toolchange", wp_payload) );
 
 	propose.setContent( std::to_string(duration_cost) );
 

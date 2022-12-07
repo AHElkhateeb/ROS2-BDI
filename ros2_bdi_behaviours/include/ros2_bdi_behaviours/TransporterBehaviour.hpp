@@ -7,7 +7,7 @@
 class TransporterBehaviour : public ContractNetResponder
 {
 public:
-	TransporterBehaviour(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id);
+	TransporterBehaviour(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id, string ConversationId);
 
 	//Functions to implement from CNetResponder
 	ACLMessage handleCfp(ACLMessage cfp);

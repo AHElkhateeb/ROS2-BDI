@@ -24,7 +24,7 @@ namespace ACLConversations{
     class ConversationsClient
     {
         public:
-            ConversationsClient(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id);
+            ConversationsClient(std::set<BDIManaged::ManagedDesire>* desire_set, std::set<BDIManaged::ManagedBelief>* belief_set, string &agent_id, string ConversationId);
 
             virtual void receiveMsg(ACLMessage msg);
 

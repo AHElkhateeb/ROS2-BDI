@@ -94,11 +94,13 @@ void StoreBids::react(ContractNetInitiator* contractNetInitiator, ACLMessage con
   if(Message.getPerformative()==AclMsg::PROPOSE)
   {
     contractNetInitiator->responses.push_back(Message);
+    std::cout << "Propose received from agent: " << Message.getSender() << std::endl;
     contractNetInitiator->handlePropose(Message);
   }
   else if(Message.getPerformative()==AclMsg::REFUSE)
   {
     contractNetInitiator->responses.push_back(Message);
+    std::cout << "Refuse received from agent: " << Message.getSender() << std::endl;
     contractNetInitiator->handleReject(Message);
   }
   else
