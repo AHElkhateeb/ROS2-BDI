@@ -70,8 +70,9 @@ void EvaluateBids::entry(ContractNetInitiator* contractNetInitiator)
       }
   }
 
-  contractNetInitiator->sendMsg(contractNetInitiator->acceptances);
-  
+  auto number_of_sent_messages = contractNetInitiator->sendMsg(contractNetInitiator->acceptances);
+  std::cout << "Evaluate Bids state: Just sent("<<number_of_sent_messages<<") the "<<contractNetInitiator->acceptances[0].getPerformative()<<" message to agent " << contractNetInitiator->acceptances[0].getReceivers()[0] << std::endl;
+
   if(contractNetInitiator->nAcceptances > 0)
   {
     contractNetInitiator->setState(WaitForResult::getInstance());

@@ -79,6 +79,7 @@ std::vector<ACLMessage> OrganizerBehaviour::handleAllResponses(std::vector<ACLMe
 	{
 		temp = responses[i].createReply();
 		temp.setPerformative(AclMsg::ACCEPT_PROPOSAL);
+		RCLCPP_INFO(node_->get_logger(), "Accepting the proposal of agent "+temp.getReceivers()[0]);
 		acceptances.push_back(temp);
 	}
 	// Reject the rest
