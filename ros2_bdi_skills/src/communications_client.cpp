@@ -225,7 +225,10 @@ UpdDesireResult CommunicationsClient::updDesireRequest(const string& agent_ref, 
 */
     bool CommunicationsClient::publishMsg(AclMsg msg, std::string topic)
     {
-        auto msg_publisher = node_->create_publisher<AclMsg>(topic, 10);
+        rclcpp::QoS qos_reliable = rclcpp::QoS(10);
+        qos_reliable.reliable();
+        
+        auto msg_publisher = node_->create_publisher<AclMsg>(topic, qos_reliable);
         if( msg_publisher->get_subscription_count() > 0 )
         {
             msg_publisher->publish(msg);

@@ -39,8 +39,11 @@ ConversationsClient::ConversationsClient(std::set<BDIManaged::ManagedDesire>* de
     node_ = rclcpp::Node::make_shared("conversations_client"+agent_id_+"_"+ConversationId_);
     RCLCPP_INFO(node_->get_logger(), "ConvID not found, Node Created");
 
+    rclcpp::QoS qos_reliable = rclcpp::QoS(10);
+    qos_reliable.reliable();
+
     // del conversation client publisher -> to publish on the topic and alter the conversations set
-    del_conv_client_publisher_ = node_->create_publisher<std_msgs::msg::String>(DEL_CONV_TOPIC, 10);
+    del_conv_client_publisher_ = node_->create_publisher<std_msgs::msg::String>(DEL_CONV_TOPIC, qos_reliable);
 
     // add belief publisher -> to publish on the topic and alter the belief set
     add_belief_publisher_ = node_->create_publisher<Belief>(ADD_BELIEF_TOPIC, 10);
@@ -62,6 +65,8 @@ int ConversationsClient::sendMsg(ACLMessage msg)
 {
     string topicName;
     int sentMsgs=0;
+    rclcpp::QoS qos_reliable = rclcpp::QoS(10);
+    qos_reliable.reliable();
 
     RCLCPP_INFO(node_->get_logger(), "The sendMsg function is sending message with "+(this->ConversationId_)+ " previous convID was: " + msg.getConversationId());
     //TO-DO: msg.setSender("AGENT_ID"); //This Agent's ID should be added here
@@ -72,7 +77,7 @@ int ConversationsClient::sendMsg(ACLMessage msg)
     for(int i = 0 ; i < msg.getReceivers().size() ; i++)
     {
         topicName = "/" + msg.getReceivers()[i] + "/" + ACL_MSG_TOPIC;
-        auto msg_publisher = node_->create_publisher<AclMsg>(topicName, 10);
+        auto msg_publisher = node_->create_publisher<AclMsg>(topicName, qos_reliable);
         if( msg_publisher->get_subscription_count() > 0 )
         {
             msg_publisher->publish(ros2Msg);
@@ -88,6 +93,8 @@ int ConversationsClient::sendMsg(std::vector<ACLMessage> msgs)
 {
     string topicName;
     int sentMsgs=0;
+    rclcpp::QoS qos_reliable = rclcpp::QoS(10);
+    qos_reliable.reliable();
 
     auto it_begin =msgs.begin();
     auto it_end =msgs.end();
@@ -107,7 +114,7 @@ int ConversationsClient::sendMsg(std::vector<ACLMessage> msgs)
             for(int i = 0 ; i < (*it_begin).getReceivers().size() ; i++)
             {
                 topicName = "/" + (*it_begin).getReceivers()[i] + "/" + ACL_MSG_TOPIC;
-                auto msg_publisher = node_->create_publisher<AclMsg>(topicName, 10);
+                auto msg_publisher = node_->create_publisher<AclMsg>(topicName, qos_reliable);
                 if( msg_publisher->get_subscription_count() > 0 )
                 {
                     msg_publisher->publish(ros2Msg);
