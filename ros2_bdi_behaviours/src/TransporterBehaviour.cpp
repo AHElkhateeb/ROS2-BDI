@@ -1,6 +1,6 @@
 #include "ros2_bdi_behaviours/TransporterBehaviour.hpp"
 
-#define TETRABOT_SPEED 1500		//Speed in mm/s
+#define TETRABOT_SPEED 1000		//Speed in mm/s
 
 /*
 Helper functions
